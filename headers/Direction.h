@@ -1,4 +1,5 @@
-
+#ifndef DIRECTION_H
+#define DIRECTION_H
 class Direction {
 public:
 
@@ -8,3 +9,5 @@ public:
 private:
 	float _x, _y, _z;
 };
+
+#endif //DIRECTION_H

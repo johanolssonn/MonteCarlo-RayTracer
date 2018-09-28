@@ -1,3 +1,5 @@
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
 #include <vector>
 #include "Vertex.h"
 #include "ColorDbl.h"
@@ -11,3 +13,5 @@ private:
 	ColorDbl _color;
 	Direction _normal;
 };
+
+#endif //TRIANGLE_H

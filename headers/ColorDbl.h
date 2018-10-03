@@ -4,7 +4,7 @@
 class ColorDbl {
 
 public:
-	ColorDbl(double r, double g, double b);
+	ColorDbl(double r = 1.0, double g = 1.0, double b = 1.0); //DEfault white
 	~ColorDbl() = default;
 
 private:

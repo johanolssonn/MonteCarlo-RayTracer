@@ -1,6 +1,9 @@
-#include "Vertex.h"
+#ifndef RAY_H
+#define RAY_H
+
+
+#include "Definitions.h"
 #include "ColorDbl.h"
-#include "Triangle.h"
 #include <vector>
 class Ray {
 public:
@@ -10,6 +13,8 @@ public:
 	Vertex _start, _end;
 	std::vector<Vertex> VERTS;
 	ColorDbl _color;
-	//Triangle &_triangle;
+	//Triangle *_triangle;
 
 };
+
+#endif //RAY_H

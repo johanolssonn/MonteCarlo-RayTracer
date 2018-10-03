@@ -1,6 +1,11 @@
 #include "Vertex.h"
 
-
+Vertex::Vertex()
+{
+	_x = 0.0f;
+	_y = 0.0f;
+	_z = 0.0f;
+}
 Vertex::Vertex(float x, float y, float z, float w)
 	: _x{ x }, _y{ y }, _z{ z }, _w{ w } {};
 

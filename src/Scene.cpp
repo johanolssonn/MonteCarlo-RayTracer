@@ -21,25 +21,25 @@ Scene::Scene() {}
 //  
 void Scene::createScene()
 {
-	const Vertex a_floor{ -3.0f, 0.0f, -5.0f };
-	const Vertex b_floor{ -0.0f, 6.0f, -5.0f };
-	const Vertex c_floor{ 10.0f, 6.0f, -5.0f };
-	const Vertex d_floor{ 13.0f, 0.0f, -5.0f };
-	const Vertex e_floor{ 10.0f, -6.0f, -5.0f };
-	const Vertex f_floor{ 0.0f, -6.0f, -5.0f };
-	const Vertex origo_floor{ 0.0f, 0.0f, -5.0f };
-	const Vertex origo10_floor{ 10.0f, 0.0f, -5.0f};
+	const Vertex a_floor{ -3.0, 0.0, -5.0, 1.0 };
+	const Vertex b_floor{ -0.0, 6.0, -5.0, 1.0 };
+	const Vertex c_floor{ 10.0, 6.0, -5.0, 1.0 };
+	const Vertex d_floor{ 13.0, 0.0, -5.0, 1.0 };
+	const Vertex e_floor{ 10.0, -6.0, -5.0, 1.0 };
+	const Vertex f_floor{ 0.0, -6.0, -5.0, 1.0 };
+	const Vertex origo_floor{ 0.0, 0.0, -5.0, 1.0 };
+	const Vertex origo10_floor{ 10.0, 0.0, -5.0, 1.0 };
 
-	const Vertex a_ceiling{ -3.0f, 0.0f, 5.0f };
-	const Vertex b_ceiling{ -0.0f, 6.0f, 5.0f };
-	const Vertex c_ceiling{ 10.0f, 6.0f, 5.0f };
-	const Vertex d_ceiling{ 13.0f, 0.0f, 5.0f };
-	const Vertex e_ceiling{ 10.0f, -6.0f, 5.0f };
-	const Vertex f_ceiling{ 0.0f, -6.0f, 5.0f };
-	const Vertex origo_ceiling{ 0.0f, 0.0f, 5.0f };
-	const Vertex origo10_ceiling{ 10.0f, 0.0f, 5.0f};
+	const Vertex a_ceiling{ -3.0, 0.0, 5.0, 1.0 };
+	const Vertex b_ceiling{ -0.0, 6.0, 5.0, 1.0 };
+	const Vertex c_ceiling{ 10.0, 6.0, 5.0, 1.0 };
+	const Vertex d_ceiling{ 13.0, 0.0, 5.0, 1.0 };
+	const Vertex e_ceiling{ 10.0, -6.0, 5.0, 1.0 };
+	const Vertex f_ceiling{ 0.0, -6.0, 5.0, 1.0 };
+	const Vertex origo_ceiling{ 0.0, 0.0, 5.0, 1.0 };
+	const Vertex origo10_ceiling{ 10.0, 0.0, 5.0, 1.0 };
 
-	const Vertex g{ -3.0f, .0f, 5.0f };
+/*	const Vertex g{ -3.0f, .0f, 5.0f };
 	const Vertex h{ .0f, .0f, 5.0f };
 	const Vertex i{ 10.0f, .0f, 5.0f };
 	const Vertex j{ 13.0f, .0f, 5.0f };
@@ -47,7 +47,7 @@ void Scene::createScene()
 	const Vertex l{ 10.0f, .0f, -5.0f };
 	const Vertex m{ .0f, .0f, -5.0f };
 	const Vertex n{ -3.0f, .0f, -5.0f };
-
+	*/
 
 
 	const ColorDbl white(1.0, 1.0, 1.0); //Default constructor gives white color
@@ -90,8 +90,6 @@ void Scene::createScene()
 	const Direction rbWall_norm = CalculateSurfaceNormal(a_floor, a_ceiling, f_floor);
 	triangle_list.push_back(Triangle(a_floor, a_ceiling, f_floor, blue, rbWall_norm));
 	triangle_list.push_back(Triangle(a_ceiling, f_ceiling, f_floor, blue, rbWall_norm));
-
-	std::cout << "RIGHT BACK WALL NORMAL: " << rbWall_norm << std::endl;
 	
 
 	//LEFT BACK WALL
@@ -99,21 +97,17 @@ void Scene::createScene()
 	triangle_list.push_back(Triangle(b_ceiling, a_ceiling, b_floor, yellow, lbWall_norm));
 	triangle_list.push_back(Triangle(a_ceiling, a_floor, b_floor, yellow, lbWall_norm));
 
-	std::cout << "LEFT BACK WALL NORMAL: " << lbWall_norm << std::endl;
-
 	//RIGHT FRONT WALL
 	const Direction rfWall_norm = CalculateSurfaceNormal(e_floor, e_ceiling, d_floor);
 	triangle_list.push_back(Triangle(e_floor, e_ceiling, d_floor, gray, rfWall_norm));
 	triangle_list.push_back(Triangle(e_ceiling, d_ceiling, d_floor, gray, rfWall_norm));
-
-	std::cout << "RIGHT Front WALL NORMAL: " << rfWall_norm << std::endl;
 
 	//LEFT FRONT WALL
 	const Direction lfWall_norm = CalculateSurfaceNormal(c_floor, d_floor, c_ceiling);
 	triangle_list.push_back(Triangle(c_floor, d_floor, c_ceiling, orange, lfWall_norm));
 	triangle_list.push_back(Triangle(d_floor, d_ceiling, c_ceiling, orange, lfWall_norm));
 
-	std::cout << "Left FRONT WALL NORMAL: " << lfWall_norm << std::endl;
+	std::cout << "LEFT FRONT WALL : [" << lfWall_norm.x << ", " <<  lfWall_norm.y  << ", "<< lfWall_norm.z << "]" << std::endl;
 
 
 };
@@ -124,10 +118,10 @@ Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, cons
 	Vertex U(p2 - p1);
 	Vertex V(p3 - p1);
 
-	Normal._x = (U._y * V._z) - (U._z * V._y);
-	Normal._y = (U._z * V._x) - (U._x * V._z);
-	Normal._z = (U._x * V._y) - (U._y * V._x);
+	Normal.x = (U.y * V.z) - (U.z * V.y);
+	Normal.y = (U.z * V.x) - (U.x * V.z);
+	Normal.z = (U.x * V.y) - (U.y * V.x);
 
-	Normal.normalize();
+	Normal = glm::normalize(Normal);
 	return Normal;
 };

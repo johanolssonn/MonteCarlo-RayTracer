@@ -2,6 +2,7 @@
 #define VERTEX_H
 
 struct Vertex {
+	Vertex();
 	Vertex(float x, float y, float z, float w = 1.0f);
 	~Vertex() = default;
 

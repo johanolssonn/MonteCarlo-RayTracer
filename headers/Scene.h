@@ -1,11 +1,8 @@
-#include "Vertex.h"
+#include "Definitions.h"
 #include "ColorDbl.h"
 #include "Triangle.h"
-#include "Direction.h"
 
 #include <vector>
-#include <iostream>
-#include <ostream>
 class Scene {
 public:
 	Scene();

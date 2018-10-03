@@ -1,4 +1,4 @@
-#include "Vertex.h"
+#include "Definitions.h"
 #include "Pixel.h"
 #include "ColorDbl.h"
 #include "Triangle.h"

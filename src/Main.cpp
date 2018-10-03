@@ -1,11 +1,10 @@
 #include <vector>
 #include <iostream>
-
+#include "Scene.h"
 int main () {
 
-    //kommentar
-    std::cout << "Oh lord";
-    std::vector<int> ints;
-    ints.push_back(5);
+	Scene sc;
+	sc.createScene();
+
     return 0;
 }

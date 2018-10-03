@@ -70,7 +70,7 @@ void Scene::createScene()
 	//CEILING
 	const Direction ceiling_norm(0.0 ,0.0, -1.0);
 	triangle_list.push_back(Triangle(a_ceiling, b_ceiling, f_ceiling, white, ceiling_norm));
-	triangle_list.push_back(Triangle(b, origo10_ceiling, origo_ceiling, white, ceiling_norm));
+	triangle_list.push_back(Triangle(b_ceiling, origo10_ceiling, origo_ceiling, white, ceiling_norm));
 	triangle_list.push_back(Triangle(origo10_ceiling, b_ceiling, c_ceiling, white, ceiling_norm));
 	triangle_list.push_back(Triangle(c_ceiling, d_ceiling, e_ceiling, white, ceiling_norm));
 	triangle_list.push_back(Triangle(e_ceiling, f_ceiling, origo10_ceiling, white, ceiling_norm));
@@ -91,6 +91,9 @@ void Scene::createScene()
 	triangle_list.push_back(Triangle(a_floor, a_ceiling, f_floor, blue, rbWall_norm));
 	triangle_list.push_back(Triangle(a_ceiling, f_ceiling, f_floor, blue, rbWall_norm));
 
+	std::cout << "RIGHT BACK WALL NORMAL: " << rbWall_norm << std::endl;
+	
+
 	//LEFT BACK WALL
 	const Direction lbWall_norm = CalculateSurfaceNormal(b_ceiling, a_ceiling, b_floor);
 	triangle_list.push_back(Triangle(b_ceiling, a_ceiling, b_floor, yellow, lbWall_norm));
@@ -107,4 +110,18 @@ void Scene::createScene()
 	triangle_list.push_back(Triangle(d_floor, d_ceiling, c_ceiling, orange, lfWall_norm));
 
 
+};
+
+Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, const Vertex &p3 ) const
+{
+	Direction Normal(0.0, 0.0, 0.0);
+	Vertex U(p2 - p1);
+	Vertex V(p3 - p1);
+
+	Normal._x = (U._y * V._z) - (U._z * V._y);
+	Normal._y = (U._z * V._x) - (U._x * V._z);
+	Normal._z = (U._x * V._y) - (U._y * V._x);
+
+	Normal.normalize();
+	return Normal;
 };

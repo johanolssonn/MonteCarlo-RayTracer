@@ -1,15 +1,13 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
-class Vertex {
-public:
-	//Vertex(float x, float y, float z);
+struct Vertex {
 	Vertex(float x, float y, float z, float w = 1.0f);
 	~Vertex() = default;
-private:
+
+	Vertex operator - (const Vertex &v) const;
+
 	float _x, _y, _z, _w;
-
-
 };
 
 #endif //VERTEX_H

@@ -10,23 +10,23 @@ Scene::Scene() {}
 //		Y	
 //		|__ X
 //   
-//(SIDE VIEW)
+//(SIDE VIEW)               <LEFT>
 //	    g(-3,5) _____h(0,5)______i(10,5)______j(13,5)
 //              |       |            |        |
-//	            |       |            |        |
+//	 <BACK>     |       |            |        |		  <FRONT>
 //	    n(-3,-5)|_______|____________|________|k(13,-5)
 //                   m(0,-5)     l(10,-5)
-//		Z	
+//		Z					<RIGHT>
 //		|__ X
 //  
 void Scene::createScene()
 {
-	const Vertex a{ -3.0f, 0.0f, 0.0f };
-	const Vertex b{ -0.0f, 6.0f, 0.0f };
-	const Vertex c{ 10.0f, 6.0f, 0.0f };
-	const Vertex d{ 13.0f, 0.0f, 0.0f };
-	const Vertex e{ 10.0f, -6.0f, 0.0f };
-	const Vertex f{ 0.0f, -6.0f, 0.0f };
+	const Vertex a{ -3.0f, 0.0f, -5.0f };
+	const Vertex b{ -0.0f, 6.0f, -5.0f };
+	const Vertex c{ 10.0f, 6.0f, -5.0f };
+	const Vertex d{ 13.0f, 0.0f, -5.0f };
+	const Vertex e{ 10.0f, -6.0f, -5.0f };
+	const Vertex f{ 0.0f, -6.0f, -5.0f };
 
 	const Vertex g{ -3.0f, .0f, 5.0f };
 	const Vertex h{ .0f, .0f, 5.0f };
@@ -57,5 +57,7 @@ void Scene::createScene()
 	triangle_list.push_back(Triangle(e, d, c, white, floor_norm));
 	triangle_list.push_back(Triangle(e, origo10, f, white, floor_norm));
 	triangle_list.push_back(Triangle(origo10, origo, f, white, floor_norm));
+
+	//WALLS
 
 };

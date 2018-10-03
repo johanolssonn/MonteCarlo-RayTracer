@@ -99,15 +99,21 @@ void Scene::createScene()
 	triangle_list.push_back(Triangle(b_ceiling, a_ceiling, b_floor, yellow, lbWall_norm));
 	triangle_list.push_back(Triangle(a_ceiling, a_floor, b_floor, yellow, lbWall_norm));
 
+	std::cout << "LEFT BACK WALL NORMAL: " << lbWall_norm << std::endl;
+
 	//RIGHT FRONT WALL
 	const Direction rfWall_norm = CalculateSurfaceNormal(e_floor, e_ceiling, d_floor);
 	triangle_list.push_back(Triangle(e_floor, e_ceiling, d_floor, gray, rfWall_norm));
 	triangle_list.push_back(Triangle(e_ceiling, d_ceiling, d_floor, gray, rfWall_norm));
 
+	std::cout << "RIGHT Front WALL NORMAL: " << rfWall_norm << std::endl;
+
 	//LEFT FRONT WALL
 	const Direction lfWall_norm = CalculateSurfaceNormal(c_floor, d_floor, c_ceiling);
 	triangle_list.push_back(Triangle(c_floor, d_floor, c_ceiling, orange, lfWall_norm));
 	triangle_list.push_back(Triangle(d_floor, d_ceiling, c_ceiling, orange, lfWall_norm));
+
+	std::cout << "Left FRONT WALL NORMAL: " << lfWall_norm << std::endl;
 
 
 };

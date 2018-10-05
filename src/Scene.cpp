@@ -125,3 +125,10 @@ Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, cons
 	Normal = glm::normalize(Normal);
 	return Normal;
 };
+
+void Scene::findIntersectedTriangle(Ray &arg)
+{
+	//CALL Triangle::rayIntersection(Ray &ray) for every triangle in the secene untill it returns true
+	//Then pass a reference to argument "ray" which <Triangle> that is intersected 
+	//aswell as the intersectionpoint <Vertex>.
+}

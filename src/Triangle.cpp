@@ -9,10 +9,10 @@ Triangle::Triangle(
 
 bool Triangle::rayIntersection(Ray &ray)
 {
-	glm::vec3 T = ray._start - _p1;
+	glm::vec3 T = *ray._start - _p1;
 	glm::vec3 E1 = _p2 - _p1;
 	glm::vec3 E2 = _p3 - _p1;
-	glm::vec3 D = ray._end - ray._start;
+	glm::vec3 D = *ray._end - *ray._start;
 	glm::vec3 P = glm::cross(D, E2);
 	glm::vec3 Q = glm::cross(T, E1);
 
@@ -31,7 +31,7 @@ bool Triangle::rayIntersection(Ray &ray)
 	float t	 = glm::dot(Q, E2) / glm::dot(P, E1);
 	if (t > EPSILON && t < 10000000.0f)
 	{
-		ray._end = ray._start + (ray._end - ray._start)*t;
+		*ray._end = *ray._start + (*ray._end - *ray._start)*t;
 		return true;
 	}
 	return false;

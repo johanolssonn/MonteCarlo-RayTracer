@@ -5,12 +5,14 @@
 #include "Definitions.h"
 #include "ColorDbl.h"
 #include <vector>
+
 class Ray {
 public:
-	Ray(Vertex start, Vertex end, ColorDbl color);
+	Ray(Vertex *start, Vertex *end, ColorDbl color);
 	~Ray() = default;
 
-	Vertex _start, _end;
+	Vertex *_start;
+	Vertex *_end;
 	std::vector<Vertex> VERTS;
 	ColorDbl _color;
 	//Triangle *_triangle;

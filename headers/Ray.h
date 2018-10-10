@@ -6,6 +6,8 @@
 #include "ColorDbl.h"
 #include <vector>
 
+struct Triangle;
+
 class Ray {
 public:
 	Ray(Vertex *start, Vertex *end, ColorDbl color);
@@ -15,8 +17,7 @@ public:
 	Vertex *_end;
 	std::vector<Vertex> VERTS;
 	ColorDbl _color;
-	//Triangle *_triangle;
-
+	Triangle* _triangle;
 };
 
 #endif //RAY_H

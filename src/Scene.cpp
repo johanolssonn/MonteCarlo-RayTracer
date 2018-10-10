@@ -60,52 +60,52 @@ void Scene::createScene()
 
 	//FLOOR
 	const Direction floor_norm( 0.0, 0.0, 1.0 );
-	triangle_list.push_back(Triangle(a_floor, f_floor, b_floor, white, floor_norm));
-	triangle_list.push_back(Triangle(b_floor, origo_floor, origo10_floor, white, floor_norm));
-	triangle_list.push_back(Triangle(origo10_floor, c_floor, b_floor, white, floor_norm));
-	triangle_list.push_back(Triangle(e_floor, d_floor, c_floor, white, floor_norm));
-	triangle_list.push_back(Triangle(e_floor, origo10_floor, f_floor, white, floor_norm));
-	triangle_list.push_back(Triangle(origo10_floor, origo_floor, f_floor, white, floor_norm));
+	_triangleList.push_back(Triangle(a_floor, f_floor, b_floor, white, floor_norm));
+	_triangleList.push_back(Triangle(b_floor, origo_floor, origo10_floor, white, floor_norm));
+	_triangleList.push_back(Triangle(origo10_floor, c_floor, b_floor, white, floor_norm));
+	_triangleList.push_back(Triangle(e_floor, d_floor, c_floor, white, floor_norm));
+	_triangleList.push_back(Triangle(e_floor, origo10_floor, f_floor, white, floor_norm));
+	_triangleList.push_back(Triangle(origo10_floor, origo_floor, f_floor, white, floor_norm));
 
 	//CEILING
 	const Direction ceiling_norm(0.0 ,0.0, -1.0);
-	triangle_list.push_back(Triangle(a_ceiling, b_ceiling, f_ceiling, white, ceiling_norm));
-	triangle_list.push_back(Triangle(b_ceiling, origo10_ceiling, origo_ceiling, white, ceiling_norm));
-	triangle_list.push_back(Triangle(origo10_ceiling, b_ceiling, c_ceiling, white, ceiling_norm));
-	triangle_list.push_back(Triangle(c_ceiling, d_ceiling, e_ceiling, white, ceiling_norm));
-	triangle_list.push_back(Triangle(e_ceiling, f_ceiling, origo10_ceiling, white, ceiling_norm));
-	triangle_list.push_back(Triangle(origo_ceiling, origo10_ceiling, f_ceiling, white, ceiling_norm));
+	_triangleList.push_back(Triangle(a_ceiling, b_ceiling, f_ceiling, white, ceiling_norm));
+	_triangleList.push_back(Triangle(b_ceiling, origo10_ceiling, origo_ceiling, white, ceiling_norm));
+	_triangleList.push_back(Triangle(origo10_ceiling, b_ceiling, c_ceiling, white, ceiling_norm));
+	_triangleList.push_back(Triangle(c_ceiling, d_ceiling, e_ceiling, white, ceiling_norm));
+	_triangleList.push_back(Triangle(e_ceiling, f_ceiling, origo10_ceiling, white, ceiling_norm));
+	_triangleList.push_back(Triangle(origo_ceiling, origo10_ceiling, f_ceiling, white, ceiling_norm));
 	
 	//RIGHT WALL
 	const Direction rWall_norm(0.0 ,1.0, 0.0);
-	triangle_list.push_back(Triangle(f_floor, f_ceiling, e_floor, red, rWall_norm));
-	triangle_list.push_back(Triangle(f_ceiling, e_ceiling, e_floor, red, rWall_norm));
+	_triangleList.push_back(Triangle(f_floor, f_ceiling, e_floor, red, rWall_norm));
+	_triangleList.push_back(Triangle(f_ceiling, e_ceiling, e_floor, red, rWall_norm));
 
 	//LEFT WALL
 	const Direction lWall_norm(0.0, -1.0, 0.0);
-	triangle_list.push_back(Triangle(b_ceiling, b_floor, c_floor, green, lWall_norm));
-	triangle_list.push_back(Triangle(b_ceiling, c_ceiling, c_ceiling, green, lWall_norm));
+	_triangleList.push_back(Triangle(b_ceiling, b_floor, c_floor, green, lWall_norm));
+	_triangleList.push_back(Triangle(b_ceiling, c_ceiling, c_ceiling, green, lWall_norm));
 
 	//RIGHT BACK WALL
 	const Direction rbWall_norm = CalculateSurfaceNormal(a_floor, a_ceiling, f_floor);
-	triangle_list.push_back(Triangle(a_floor, a_ceiling, f_floor, blue, rbWall_norm));
-	triangle_list.push_back(Triangle(a_ceiling, f_ceiling, f_floor, blue, rbWall_norm));
+	_triangleList.push_back(Triangle(a_floor, a_ceiling, f_floor, blue, rbWall_norm));
+	_triangleList.push_back(Triangle(a_ceiling, f_ceiling, f_floor, blue, rbWall_norm));
 	
 
 	//LEFT BACK WALL
 	const Direction lbWall_norm = CalculateSurfaceNormal(b_ceiling, a_ceiling, b_floor);
-	triangle_list.push_back(Triangle(b_ceiling, a_ceiling, b_floor, yellow, lbWall_norm));
-	triangle_list.push_back(Triangle(a_ceiling, a_floor, b_floor, yellow, lbWall_norm));
+	_triangleList.push_back(Triangle(b_ceiling, a_ceiling, b_floor, yellow, lbWall_norm));
+	_triangleList.push_back(Triangle(a_ceiling, a_floor, b_floor, yellow, lbWall_norm));
 
 	//RIGHT FRONT WALL
 	const Direction rfWall_norm = CalculateSurfaceNormal(e_floor, e_ceiling, d_floor);
-	triangle_list.push_back(Triangle(e_floor, e_ceiling, d_floor, gray, rfWall_norm));
-	triangle_list.push_back(Triangle(e_ceiling, d_ceiling, d_floor, gray, rfWall_norm));
+	_triangleList.push_back(Triangle(e_floor, e_ceiling, d_floor, gray, rfWall_norm));
+	_triangleList.push_back(Triangle(e_ceiling, d_ceiling, d_floor, gray, rfWall_norm));
 
 	//LEFT FRONT WALL
 	const Direction lfWall_norm = CalculateSurfaceNormal(c_floor, d_floor, c_ceiling);
-	triangle_list.push_back(Triangle(c_floor, d_floor, c_ceiling, orange, lfWall_norm));
-	triangle_list.push_back(Triangle(d_floor, d_ceiling, c_ceiling, orange, lfWall_norm));
+	_triangleList.push_back(Triangle(c_floor, d_floor, c_ceiling, orange, lfWall_norm));
+	_triangleList.push_back(Triangle(d_floor, d_ceiling, c_ceiling, orange, lfWall_norm));
 
 	std::cout << "LEFT FRONT WALL : [" << lfWall_norm.x << ", " <<  lfWall_norm.y  << ", "<< lfWall_norm.z << "]" << std::endl;
 
@@ -131,4 +131,13 @@ void Scene::findIntersectedTriangle(Ray &arg)
 	//CALL Triangle::rayIntersection(Ray &ray) for every triangle in the secene untill it returns true
 	//Then pass a reference to argument "ray" which <Triangle> that is intersected 
 	//aswell as the intersectionpoint <Vertex>.
+	for (auto i = 0; i < _triangleList.size(); i++)
+	{
+		if (_triangleList[i].rayIntersection(arg))
+		{
+			arg._triangle = &_triangleList[i];
+			std::cout << "intersection hapend lol" << std::endl;
+		}
+
+	}
 }

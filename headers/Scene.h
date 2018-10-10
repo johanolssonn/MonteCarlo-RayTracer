@@ -15,7 +15,7 @@ public:
 	void findIntersectedTriangle(Ray &arg);
 private:
 
-	std::list<Triangle> triangle_list;
-	std::list<Vertex> vertex_list;
+	std::vector<Triangle> _triangleList;
+	std::vector<Vertex> vertex_list;
 
 };

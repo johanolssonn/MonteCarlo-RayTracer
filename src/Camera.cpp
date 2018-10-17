@@ -54,4 +54,19 @@ void Camera::render(Scene &scene) {
 void Camera::createImage(Scene &scene)
 {
 	render(scene);
+
+	/*
+	std::ofstream img("picture.ppm");
+	img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
+	for (int i = 0; i < WIDTH; i++) {
+		for (int j = 0; j < HEIGHT; j++) {
+			//ColorDbl pixelColor = _pixel[i][j]._color
+			int r = 255; 
+			int g = 255;
+			int b = 255;
+			img << r << " " << g << " " << b << std::endl; //img << pixelColor._r << pixelColor._g << pixelColor._b << std::endl;
+		}
+	}
+	img.close();
+	*/
 }

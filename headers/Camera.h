@@ -3,6 +3,7 @@
 #include "ColorDbl.h"
 #include "Scene.h"
 #include <array>
+#include <fstream>
 
 const int WIDTH = 800;
 const int HEIGHT = 800;

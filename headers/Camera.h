@@ -1,22 +1,29 @@
 #include "Definitions.h"
 #include "Pixel.h"
 #include "ColorDbl.h"
-#include "Triangle.h"
-#include <vector>
+#include "Scene.h"
+#include <array>
+
+const int WIDTH = 800;
+const int HEIGHT = 800;
 
 class Camera {
 public:
-	Camera(Vertex eyePoint1, Vertex eyePoint2, bool useEyePoint1);
+	Camera(bool useEyePoint1 = true);
 	~Camera() = default;
 
-	Vertex _eyePoint1, _eyePoint2;
-    bool _useEyePoint1;
 
-    Pixel pixelArray[800][800];
-
+	Pixel *_image = new Pixel[WIDTH * HEIGHT];
+	Pixel *_pixel = _image;
+	//std::array<std::array <Pixel, WIDTH>, HEIGHT> _pixelArray;
+    //Pixel pixelArray[800][800];
+	
+	ColorDbl trace(const Direction &rayorig, const Direction &raydir,const std::vector<Triangle> &triangles,const int &depth);
+	void render(Scene&);
+	void createImage(Scene&);
 private: 
-
-    void render();
+	bool _useEyePoint1;
+	Direction _eyePoint;
 	
 
 };

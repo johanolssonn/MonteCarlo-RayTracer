@@ -1,4 +1,6 @@
 #include "Pixel.h"
 
-Pixel::Pixel() 
-	:_color{0.0,0.0,0.0} {}
+Pixel::Pixel()
+	:_color{ 1.0, 1.0, 1.0 } {}
+Pixel::Pixel(ColorDbl color) 
+	:_color{color} {}

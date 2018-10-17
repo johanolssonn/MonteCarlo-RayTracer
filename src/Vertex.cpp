@@ -1,3 +1,4 @@
+/*
 #include "Vertex.h"
 
 Vertex::Vertex()
@@ -17,3 +18,4 @@ Vertex Vertex::operator - (const Vertex &v) const
 	temp._z = _z - v._z;
 	return temp;
 };
+*/

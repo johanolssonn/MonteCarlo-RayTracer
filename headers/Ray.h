@@ -10,13 +10,14 @@ struct Triangle;
 
 class Ray {
 public:
-	Ray(Vertex *start, Vertex *end, ColorDbl color);
+	Ray(Vertex &start, Direction &dir, ColorDbl color);
 	~Ray() = default;
 
-	Vertex *_start;
-	Vertex *_end;
-	std::vector<Vertex> VERTS;
+	Vertex _start;
+	Direction _dir;
 	ColorDbl _color;
+	Vertex*_end;
+	std::vector<Vertex> VERTS;
 	Triangle* _triangle;
 };
 

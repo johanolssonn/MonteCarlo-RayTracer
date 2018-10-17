@@ -4,6 +4,7 @@ class Pixel {
 public:
 
 	Pixel();
+	Pixel(ColorDbl color);
 	~Pixel() = default;
 
 private:

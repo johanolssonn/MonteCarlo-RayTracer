@@ -112,6 +112,11 @@ void Scene::createScene()
 
 };
 
+std::vector<Triangle> Scene::getTriangles()
+{
+	return _triangleList;
+}
+
 Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, const Vertex &p3 ) const
 {
 	Direction Normal(0.0, 0.0, 0.0);

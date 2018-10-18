@@ -6,7 +6,7 @@ int main () {
 
 	Scene sc;
 	sc.createScene();
-	Camera cam(true); //uses eyepoint1 (-2, 0, 0);
+	Camera cam(false); //uses eyepoint1 (-2, 0, 0);
 	cam.createImage(sc);
 
 

@@ -6,7 +6,7 @@
 	 if (useEyePoint1)
 		 _eyePoint = Vertex{ -2.0, 0.0, 0.0, 0.0 }; //e1
 	 else
-	 	 _eyePoint = Vertex{ -1.0, 0.0, 0.0, 0.0 }; //e2
+	 	 _eyePoint = Vertex{ -0.2, 0.0, 0.0, 0.0 }; //e2
  }
  
  ColorDbl Camera::trace(const Direction &rayorig, const Direction &raydir,const std::vector<Triangle> &triangles,const int &depth)
@@ -42,7 +42,7 @@ void Camera::render(Scene &scene) {
 			for (int i = 0; i < WIDTH; ++i) {
 
 				// generate primary ray
-				float y = (2 * (i + 0.5) / (float)WIDTH - 1)*scale;
+				float y = (1 - 2 * (i + 0.5) / (float)WIDTH)*scale;
 				float z = (1 - 2 * (j + 0.5) / (float)HEIGHT)*scale;
 				Vertex ray_origin = _eyePoint;
 				Direction ray_dir = Direction{ 1.0, y,z } -Direction{ ray_origin };
@@ -58,16 +58,18 @@ void Camera::render(Scene &scene) {
 
 		std::ofstream img("picture.ppm");
 		img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
-		for (int j = 0; j < WIDTH; ++j){
-			for (int i = 0; i < HEIGHT; ++i) {
-				//int r = _pixel[i].getColor()._r; 
-				//int g = _pixel[i].getColor()._g;
-				//int b = _pixel[i].getColor()._b;
+		for (int j = 0; j < HEIGHT; ++j){
+			for (int i = 0; i < WIDTH; ++i) {
+				//int r = 255 * _pixelArray[j][i]._r;
+				//int g = 255 * _pixelArray[j][i]._g;
+				//int b = 255 * _pixelArray[j][i]._b;
 				char r = (char)(255 * clamp(_pixelArray[j][i]._r, 0, 1));
 				char g = (char)(255 * clamp(_pixelArray[j][i]._g, 0, 1));
 				char b = (char)(255 * clamp(_pixelArray[j][i]._b, 0, 1));
-				img << r << " " << g << " " << b;
+				//img << r << " " << g << " " << b << " ";
+				img << r<< g<< b;
 			}
+			//img << "\n";
 		}
 		img.close();
 		//delete[] _image;

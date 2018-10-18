@@ -51,12 +51,12 @@ void Scene::createScene()
 
 
 	const ColorDbl white(1.0, 1.0, 1.0); //Default constructor gives white color
-	const ColorDbl red(1.0, 0.0, 0.0);
-	const ColorDbl green(0.0, 1.0, 0.0);
-	const ColorDbl blue(0.0, 0.0, 1.0);
-	const ColorDbl yellow(1.0, 1.0, 0.0);
-	const ColorDbl gray(0.0, 0.0, 0.0);
-	const ColorDbl orange(1.0, 0.5, 0.2);
+	const ColorDbl red(1.0, 0.0, 0.0); 	//RIGHT WALL
+	const ColorDbl green(0.0, 1.0, 0.0); //LEFT WALL
+	const ColorDbl blue(0.0, 0.0, 1.0);	 //RIGHT BACK WALL
+	const ColorDbl yellow(1.0, 1.0, 0.0); //LEFT BACK WALL
+	const ColorDbl gray(0.5, 0.5, 0.5); //RIGHT FRONT WALL
+	const ColorDbl orange(1.0, 0.65, 0.0); //LEFT FRONT WALL (actually green)
 
 	//FLOOR
 	const Direction floor_norm( 0.0, 0.0, 1.0 );
@@ -77,14 +77,14 @@ void Scene::createScene()
 	_triangleList.push_back(Triangle(origo_ceiling, origo10_ceiling, f_ceiling, white, ceiling_norm));
 	
 	//RIGHT WALL
-	const Direction rWall_norm(0.0 ,1.0, 0.0);
+	const Direction rWall_norm(0.0,1.0, 0.0);
 	_triangleList.push_back(Triangle(f_floor, f_ceiling, e_floor, red, rWall_norm));
 	_triangleList.push_back(Triangle(f_ceiling, e_ceiling, e_floor, red, rWall_norm));
 
 	//LEFT WALL
 	const Direction lWall_norm(0.0, -1.0, 0.0);
 	_triangleList.push_back(Triangle(b_ceiling, b_floor, c_floor, green, lWall_norm));
-	_triangleList.push_back(Triangle(b_ceiling, c_ceiling, c_ceiling, green, lWall_norm));
+	_triangleList.push_back(Triangle(b_ceiling, c_floor, c_ceiling, green, lWall_norm));
 
 	//RIGHT BACK WALL
 	const Direction rbWall_norm = CalculateSurfaceNormal(a_floor, a_ceiling, f_floor);
@@ -107,7 +107,7 @@ void Scene::createScene()
 	_triangleList.push_back(Triangle(c_floor, d_floor, c_ceiling, orange, lfWall_norm));
 	_triangleList.push_back(Triangle(d_floor, d_ceiling, c_ceiling, orange, lfWall_norm));
 
-	std::cout << "LEFT FRONT WALL : [" << lfWall_norm.x << ", " <<  lfWall_norm.y  << ", "<< lfWall_norm.z << "]" << std::endl;
+	//std::cout << "LEFT FRONT WALL : [" << lfWall_norm.x << ", " <<  lfWall_norm.y  << ", "<< lfWall_norm.z << "]" << std::endl;
 
 
 };
@@ -142,6 +142,7 @@ void Scene::findIntersectedTriangle(Ray &ray)
 		{
 			ray._triangle = &_triangleList[i];
 			ray._color = _triangleList[i]._color;
+			break;
 			//std::cout << "intersection hapend lol" << std::endl;
 		}
 

@@ -15,10 +15,14 @@ public:
 
 	Vertex _start;
 	Direction _dir;
-	ColorDbl _color{};
 	Vertex _end;
+	ColorDbl _color;
 	Triangle* _triangle;
 	float tMax = 20;
+
+	ColorDbl getColor() { return _color; }
+private:
+	
 };
 
 #endif //RAY_H

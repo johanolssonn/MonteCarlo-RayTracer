@@ -1,5 +1,6 @@
 #include "ColorDbl.h"
 #include "Ray.h"
+
 class Pixel {
 public:
 
@@ -7,9 +8,6 @@ public:
 	Pixel(ColorDbl &color);
 	~Pixel() = default;
 
-	double _r;
-	double _g;
-	double _b;
 	ColorDbl _color;
 private:
 	

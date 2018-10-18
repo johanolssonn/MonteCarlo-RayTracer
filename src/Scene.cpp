@@ -107,9 +107,6 @@ void Scene::createScene()
 	_triangleList.push_back(Triangle(c_floor, d_floor, c_ceiling, orange, lfWall_norm));
 	_triangleList.push_back(Triangle(d_floor, d_ceiling, c_ceiling, orange, lfWall_norm));
 
-	//std::cout << "LEFT FRONT WALL : [" << lfWall_norm.x << ", " <<  lfWall_norm.y  << ", "<< lfWall_norm.z << "]" << std::endl;
-
-
 };
 
 std::vector<Triangle> Scene::getTriangles()
@@ -143,7 +140,6 @@ void Scene::findIntersectedTriangle(Ray &ray)
 			ray._triangle = &_triangleList[i];
 			ray._color = _triangleList[i]._color;
 			break;
-			//std::cout << "intersection hapend lol" << std::endl;
 		}
 
 	}

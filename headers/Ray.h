@@ -15,7 +15,7 @@ public:
 
 	Vertex _start;
 	Direction _dir;
-	ColorDbl _color;
+	ColorDbl _color{};
 	Vertex _end;
 	Triangle* _triangle;
 	float tMax = 20;

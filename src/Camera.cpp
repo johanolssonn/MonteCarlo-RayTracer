@@ -35,9 +35,6 @@ void Camera::render(Scene &scene) {
 	std::cout << "fov = " << fov << std::endl;
 	float scale = tan(fov);
 	{
-		//Pixel *_image = new Pixel[WIDTH * HEIGHT];
-		//Pixel *_pixel = _image;
-
 		for (int j = 0; j < HEIGHT; ++j) {
 			for (int i = 0; i < WIDTH; ++i) {
 
@@ -56,20 +53,15 @@ void Camera::render(Scene &scene) {
 		}
 
 
-		std::ofstream img("picture.ppm");
+		std::ofstream img("picture.ppm", std::ios::out | std::ios::binary);
 		img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
-		for (int j = 0; j < HEIGHT; ++j){
-			for (int i = 0; i < WIDTH; ++i) {
-				//int r = 255 * _pixelArray[j][i]._r;
-				//int g = 255 * _pixelArray[j][i]._g;
-				//int b = 255 * _pixelArray[j][i]._b;
+		for (uint32_t  j = 0; j < HEIGHT; ++j){
+			for (uint32_t  i = 0; i < WIDTH; ++i) {
 				char r = (char)(255 * clamp(_pixelArray[j][i]._r, 0, 1));
 				char g = (char)(255 * clamp(_pixelArray[j][i]._g, 0, 1));
 				char b = (char)(255 * clamp(_pixelArray[j][i]._b, 0, 1));
-				//img << r << " " << g << " " << b << " ";
 				img << r<< g<< b;
 			}
-			//img << "\n";
 		}
 		img.close();
 		//delete[] _image;

@@ -1,3 +1,5 @@
 *.code-workspace
 *.exec
+*.txt
 MCRT/
+cmake-build-debug/

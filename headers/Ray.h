@@ -20,7 +20,7 @@ public:
 	Triangle* _triangle;
 	float tMax = 20;
 
-	ColorDbl getColor() { return _color; }
+	ColorDbl getColor() { return _color ;}
 private:
 	
 };

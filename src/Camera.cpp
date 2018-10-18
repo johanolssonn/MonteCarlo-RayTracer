@@ -24,6 +24,7 @@ void Camera::render(Scene &scene) {
 	std::vector<Triangle> triangles = scene.getTriangles();
 	float fov = atan(1 / glm::length(_eyePoint)); // this gives fov/2 in radians
 	std::cout << "fov = " << fov << std::endl;
+
 	float scale = tan(fov);
 	{	
 		for (int j = 0; j < HEIGHT; ++j) {
@@ -39,7 +40,8 @@ void Camera::render(Scene &scene) {
 				primary_ray._end = primary_ray._start + Vertex(primary_ray._dir, 0.0)*primary_ray.tMax;
 				scene.findIntersectedTriangle(primary_ray);
 
-				*_pixelBuffer = Pixel(primary_ray.getColor());
+				ColorDbl color = primary_ray.getColor();
+				*_pixelBuffer = Pixel(color);
 			}
 		}
 		_pixelBuffer = _pixelArray; //Reset the buffer to beginning of _pixelArray

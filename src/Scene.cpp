@@ -109,9 +109,12 @@ void Scene::createScene()
 
 };
 
-std::vector<Triangle> Scene::getTriangles()
-{
+std::vector<Triangle> Scene::getTriangles() {
 	return _triangleList;
+}
+
+void Scene::addSphere(const Sphere &s) {
+	_sphereList.push_back(s);
 }
 
 Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, const Vertex &p3 ) const

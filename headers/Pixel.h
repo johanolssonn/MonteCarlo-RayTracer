@@ -4,10 +4,14 @@ class Pixel {
 public:
 
 	Pixel();
-	Pixel(ColorDbl color);
+	Pixel(ColorDbl &color);
 	~Pixel() = default;
 
-private:
+	double _r;
+	double _g;
+	double _b;
 	ColorDbl _color;
+private:
+	
 	//std::vector<Ray> _rays;
 };

@@ -1,10 +1,7 @@
 #include "Ray.h"
 
 
-    Ray::Ray(Vertex &start, Direction &dir, ColorDbl color)
-		:_start{ start }, _dir{ dir }, _color{ color }
+    Ray::Ray(Vertex &start, Direction &dir)
+		:_start{ start }, _dir{ dir }
     {
-        //VERTS.push_back(start);
-        //VERTS.push_back(end);
-		//_triangle = end->triangle;
 	}

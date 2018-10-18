@@ -13,6 +13,7 @@ struct Triangle {
 
 	bool rayIntersection(Ray &ray);
 
+
 	const Vertex _p1;
 	const Vertex _p2; 
 	const Vertex _p3;

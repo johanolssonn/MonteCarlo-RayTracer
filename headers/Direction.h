@@ -8,7 +8,6 @@ struct Direction {
 	Direction(float x, float y, float z);
 	~Direction() = default;
 
-	void normalize();
 	friend std::ostream& operator<<(std::ostream& os, const Direction &d);
 	float _x, _y, _z;
 };

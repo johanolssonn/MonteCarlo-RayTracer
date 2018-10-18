@@ -4,9 +4,9 @@
 	 :	_useEyePoint1{useEyePoint1} {
 	 
 	 if (useEyePoint1)
-		 _eyePoint = Direction{ -2.0, 0.0, 0.0 }; //e1
+		 _eyePoint = Vertex{ -2.0, 0.0, 0.0, 0.0 }; //e1
 	 else
-	 	 _eyePoint = Direction{ -1.0, 0.0, 0.0 }; //e2
+	 	 _eyePoint = Vertex{ -1.0, 0.0, 0.0, 0.0 }; //e2
  }
  
  ColorDbl Camera::trace(const Direction &rayorig, const Direction &raydir,const std::vector<Triangle> &triangles,const int &depth)
@@ -30,43 +30,63 @@
 
 void Camera::render(Scene &scene) {
 
-	std::vector<Triangle> objects = scene.getTriangles();
-	for (int j = 0; j < HEIGHT; ++j) {
-		for (int i = 0; i < WIDTH; ++i, ++_pixel) {
-			// generate primary ray (this is what this lesson is about)
-			//...
-			/*
-			float tnear = INFINITY; // closest intersection, set to INFINITY to start with 
-			for (int k = 0; k < objects.size(); ++k) {
-				float t = INFINITY; // intersection to the current object if any 
-				if objects[k]->intersect(pimaryRay, tnear) && t < tnear) {
-				tnear = t;
-				framebuffer = objects[k].color;
+	std::vector<Triangle> triangles = scene.getTriangles();
+	float fov = atan(1 / glm::length(_eyePoint)); // this gives fov/2 in radians
+	std::cout << "fov = " << fov << std::endl;
+	float scale = tan(fov);
+	{
+		//Pixel *_image = new Pixel[WIDTH * HEIGHT];
+		//Pixel *_pixel = _image;
+
+		for (int j = 0; j < HEIGHT; ++j) {
+			for (int i = 0; i < WIDTH; ++i) {
+
+				// generate primary ray
+				float y = (2 * (i + 0.5) / (float)WIDTH - 1)*scale;
+				float z = (1 - 2 * (j + 0.5) / (float)HEIGHT)*scale;
+				Vertex ray_origin = _eyePoint;
+				Direction ray_dir = Direction{ 1.0, y,z } -Direction{ ray_origin };
+				ray_dir = glm::normalize(ray_dir);
+				Ray primary_ray(ray_origin, ray_dir);
+				primary_ray._end = primary_ray._start + Vertex(primary_ray._dir, 0.0)*primary_ray.tMax;
+				scene.findIntersectedTriangle(primary_ray);
+				_pixelArray[j][i] = primary_ray._color;
+				//std::cout << "primary_ray._color._r : " << primary_ray._color._r << std::endl;
 			}
-			}
-			*_pixel = current_ray._color;
-		*/
 		}
+
+
+		std::ofstream img("picture.ppm");
+		img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
+		for (int j = 0; j < WIDTH; ++j){
+			for (int i = 0; i < HEIGHT; ++i) {
+				//int r = _pixel[i].getColor()._r; 
+				//int g = _pixel[i].getColor()._g;
+				//int b = _pixel[i].getColor()._b;
+				char r = (char)(255 * clamp(_pixelArray[j][i]._r, 0, 1));
+				char g = (char)(255 * clamp(_pixelArray[j][i]._g, 0, 1));
+				char b = (char)(255 * clamp(_pixelArray[j][i]._b, 0, 1));
+				img << r << " " << g << " " << b;
+			}
+		}
+		img.close();
+		//delete[] _image;
 	}
-    
 }
 
 void Camera::createImage(Scene &scene)
 {
 	render(scene);
+}
 
-	/*
-	std::ofstream img("picture.ppm");
-	img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
-	for (int i = 0; i < WIDTH; i++) {
-		for (int j = 0; j < HEIGHT; j++) {
-			//ColorDbl pixelColor = _pixel[i][j]._color
-			int r = 255; 
-			int g = 255;
-			int b = 255;
-			img << r << " " << g << " " << b << std::endl; //img << pixelColor._r << pixelColor._g << pixelColor._b << std::endl;
-		}
-	}
-	img.close();
-	*/
+double Camera::clamp(double v, double lo, double hi)
+{
+	if (v < lo)
+		return lo;
+
+	else if (v > hi)
+		return hi;
+	
+	else
+		return v;
 }

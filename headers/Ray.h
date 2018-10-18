@@ -10,15 +10,15 @@ struct Triangle;
 
 class Ray {
 public:
-	Ray(Vertex &start, Direction &dir, ColorDbl color);
+	Ray(Vertex &start, Direction &dir);
 	~Ray() = default;
 
 	Vertex _start;
 	Direction _dir;
 	ColorDbl _color;
-	Vertex*_end;
-	std::vector<Vertex> VERTS;
+	Vertex _end;
 	Triangle* _triangle;
+	float tMax = 20;
 };
 
 #endif //RAY_H

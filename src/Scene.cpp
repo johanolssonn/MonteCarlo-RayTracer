@@ -131,17 +131,18 @@ Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, cons
 	return Normal;
 };
 
-void Scene::findIntersectedTriangle(Ray &arg)
+void Scene::findIntersectedTriangle(Ray &ray)
 {
 	//CALL Triangle::rayIntersection(Ray &ray) for every triangle in the secene untill it returns true
 	//Then pass a reference to argument "ray" which <Triangle> that is intersected 
 	//aswell as the intersectionpoint <Vertex>.
 	for (auto i = 0; i < _triangleList.size(); i++)
 	{
-		if (_triangleList[i].rayIntersection(arg))
+		if (_triangleList[i].rayIntersection(ray))
 		{
-			arg._triangle = &_triangleList[i];
-			std::cout << "intersection hapend lol" << std::endl;
+			ray._triangle = &_triangleList[i];
+			ray._color = _triangleList[i]._color;
+			//std::cout << "intersection hapend lol" << std::endl;
 		}
 
 	}

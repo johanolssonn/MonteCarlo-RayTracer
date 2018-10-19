@@ -5,13 +5,15 @@
 #include <array>
 #include <fstream>
 
-const int WIDTH = 200;
-const int HEIGHT = 200;
+const int WIDTH = 100;
+const int HEIGHT = 100;
 
 class Camera {
 public:
 	Camera(bool useEyePoint1 = true);
-	~Camera() { delete _pixelArray; }
+	~Camera() {
+		delete [] _pixelArray;
+	}
 	
 	ColorDbl trace(const Direction &rayorig, const Direction &raydir,const std::vector<Triangle> &triangles,const int &depth);
 	void render(Scene&);

@@ -2,7 +2,6 @@
 #define SPHERE_H
 
 #include "Definitions.h"
-#include "Surface.h"
 
 
 class Sphere {
@@ -15,7 +14,6 @@ private:
 
     glm::vec3 _center;
     float _radius;
-    Surface _surface;
 
 };
 

@@ -9,3 +9,6 @@ ColorDbl::ColorDbl() //Default white
 }
 ColorDbl::ColorDbl(double r, double g, double b)
 	:_r{ r }, _g{ g }, _b{ b } {}
+
+ColorDbl::ColorDbl(double r, double g, double b, const std::string surfType)
+	: _r{ r }, _g{ g }, _b{ b }, _surfType{surfType} {}

@@ -50,7 +50,7 @@ void Camera::render(Scene &scene) {
 
 void Camera::imageToFile()
 {
-	std::ofstream img("picture.ppm", std::ios::out | std::ios::binary);
+	std::ofstream img("picture.ppm", std::ios::out | std::ios::binary); //Second argument is so that colors are correct on Windows.
 	img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
 	for (uint32_t i = 0; i < WIDTH* HEIGHT; ++i, ++_pixelBuffer) {
 		ColorDbl clr = _pixelBuffer->_color;

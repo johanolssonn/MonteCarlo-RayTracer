@@ -136,14 +136,40 @@ void Scene::findIntersectedTriangle(Ray &ray)
 	//CALL Triangle::rayIntersection(Ray &ray) for every triangle in the secene untill it returns true
 	//Then pass a reference to argument "ray" which <Triangle> that is intersected 
 	//aswell as the intersectionpoint <Vertex>.
+	float tClosest = INFINITY;
 	for (auto i = 0; i < _triangleList.size(); i++)
 	{
-		if (_triangleList[i].rayIntersection(ray))
+		float t = _triangleList[i].rayIntersection(ray);
+		if (t < INFINITY && t >0.0 && t < tClosest)
 		{
 			ray._triangle = &_triangleList[i];
 			ray._color = _triangleList[i]._color;
-			break;
+			tClosest = t;
 		}
-
 	}
 }
+
+void Scene::addTetra(const float xPos, const float width, const float height, const float depth)
+{
+	Vertex ov(xPos, 0.0, 0.0, 1.0); //origin vertex
+	Vertex lv(xPos+depth, width/2, 0.0, 1.0); //left vertex
+	Vertex rv(xPos+depth, -width/2, 0.0, 1.0); //right vertex
+	Vertex tv(xPos, 0.0, height, 1.0); //top vertex
+
+
+	const ColorDbl red(1.0, 0.0, 0.0);
+	const ColorDbl yellow(1.0, 1.0, 0.0); 
+	const ColorDbl white(1.0, 1.0, 1.0);
+	const Direction lWall = CalculateSurfaceNormal(ov, tv, lv); //LEFT WALL
+	_triangleList.push_back(Triangle(ov, tv, lv, red, lWall));
+
+	const Direction rWall = CalculateSurfaceNormal(ov, rv, tv); //RIGHT WALL
+	_triangleList.push_back(Triangle(ov, rv, tv, yellow, rWall));
+
+	const Direction bWall = CalculateSurfaceNormal(lv, tv, rv); //BACK WALL
+	_triangleList.push_back(Triangle(lv, tv, rv, white, bWall));
+
+	const Direction floor = CalculateSurfaceNormal(ov, lv, rv); //FLOOR
+	_triangleList.push_back(Triangle(ov, lv, rv, white, floor));
+}
+

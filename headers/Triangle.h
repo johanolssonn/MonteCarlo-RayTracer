@@ -11,7 +11,7 @@ struct Triangle {
 
 	Triangle(const Vertex &p1, const Vertex &p2, const Vertex &p3, const ColorDbl &color, const Direction &normal);
 
-	bool rayIntersection(Ray &ray);
+	float rayIntersection(Ray &ray);
 
 
 	const Vertex _p1;

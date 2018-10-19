@@ -19,6 +19,7 @@ public:
 	void findIntersectedTriangle(Ray &arg);
 	std::vector<Triangle> getTriangles();
 	void addSphere(const Sphere &s);
+	void addTetra(const float xPos, const float width, const float height, const float depth);
 
 private:
 

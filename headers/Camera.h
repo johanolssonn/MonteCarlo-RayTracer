@@ -5,8 +5,8 @@
 #include <array>
 #include <fstream>
 
-const int WIDTH = 800;
-const int HEIGHT = 800;
+const int WIDTH = 200;
+const int HEIGHT = 200;
 
 class Camera {
 public:

@@ -2,6 +2,7 @@
 #define SPHERE_H
 
 #include "Definitions.h"
+#include "Ray.h"
 
 
 class Sphere {
@@ -9,6 +10,7 @@ class Sphere {
 public:
 
     Sphere(glm::vec3 center, float radius); //, Surface surface);
+    bool sphereIntersection(Ray &r);
 
 private:
 

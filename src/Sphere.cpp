@@ -4,6 +4,14 @@
 Sphere::Sphere(glm::vec3 center, float radius)   //, Surface surface)
 :_center{ center }, _radius{ radius }{};   //, _surface{ surface } {};
 
+float Sphere::getRadius() {
+    return _radius;
+}
+
+glm::vec3 Sphere::getCenter() {
+    return _center;
+}
+
 bool Sphere::sphereIntersection(Ray &r) {
 
     //geometric solution

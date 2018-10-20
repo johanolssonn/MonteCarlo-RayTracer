@@ -11,6 +11,8 @@ public:
 
     Sphere(glm::vec3 center, float radius); //, Surface surface);
     bool sphereIntersection(Ray &r);
+    float getRadius();
+    glm::vec3 getCenter();
 
 private:
 

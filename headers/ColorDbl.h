@@ -1,17 +1,18 @@
 #ifndef COLORDBL_H
 #define COLORDBL_H
+#include "Definitions.h"
 
-#include <iostream>
-using namespace std;
+const int LAMBERTIAN = 0, SPECULAR = 1, LIGHTSOURCE = 2;
+
 class ColorDbl {
 
 public:
 	ColorDbl(); //DEfault white
 	ColorDbl(double r, double g, double b); 
-	ColorDbl(double r, double g, double b, const std::string surfType);
+	ColorDbl(double r, double g, double b, const int surfType);
 	~ColorDbl() = default;
 	double _r, _g, _b;
-	string _surfType;
+	int _surfType;
 private:
 	
 };

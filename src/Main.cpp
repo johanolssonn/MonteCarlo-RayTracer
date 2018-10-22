@@ -15,7 +15,6 @@ int main () {
 	sc.addTetra(4.0, 2.0, 2.0, 2.0);
 
     Light light;
-
     sc.importTriangles(light.getLightTriangles());
 
 	//sc.addSphere(sphere1);

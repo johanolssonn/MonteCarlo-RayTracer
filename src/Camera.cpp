@@ -38,9 +38,19 @@ void Camera::render(Scene &scene) {
 				ray_dir = glm::normalize(ray_dir);
 				Ray primary_ray(ray_origin, ray_dir);
 				primary_ray._end = primary_ray._start + Vertex(primary_ray._dir, 0.0)*primary_ray.tMax;
-				scene.findIntersectedTriangle(primary_ray);
 
-				ColorDbl color = primary_ray.getColor();
+				ColorDbl color;
+				float a = scene.findIntersectedTriangle(primary_ray); //DIST TO TRIANGLE
+                float b = scene.findIntersectedSphere(primary_ray, color); //DIST TO SPHERE
+                if(a<b) // If a triangle is closer than any sphere.
+                {
+                    color = primary_ray.getColor();
+                }
+                else
+				{
+                	primary_ray._triangle = nullptr;
+				}
+
 				*_pixelBuffer = Pixel(color);
 			}
 		}

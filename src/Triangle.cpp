@@ -35,5 +35,5 @@ float Triangle::rayIntersection(Ray &ray)
 		ray._end = ray._start + (ray._end - ray._start)*t;
 		return t;
 	}
-	return false;
+	return INFINITY;
 }

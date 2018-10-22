@@ -9,7 +9,7 @@
 int main () {
 
 	Scene sc;
-	Sphere sphere1 = Sphere(glm::vec3(0.0f, 0.0f, 0.0f), 0.2f);
+	Sphere sphere1 = Sphere(glm::vec3(4.0f, -2.0f, 0.0f), 1.0f, ColorDbl(0,1,0));
 
 	sc.createScene();
 	sc.addTetra(4.0, 2.0, 2.0, 2.0);
@@ -17,11 +17,10 @@ int main () {
     Light light;
     sc.importTriangles(light.getLightTriangles());
 
-	//sc.addSphere(sphere1);
+	sc.addSphere(sphere1);
 
 	Camera cam(false); // true => uses eyepoint1 (-2, 0, 0);
 	cam.createImage(sc);
-
 
 
     return 0;

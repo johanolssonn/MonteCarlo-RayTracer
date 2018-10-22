@@ -137,22 +137,56 @@ Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, cons
 	return Normal;
 };
 
-void Scene::findIntersectedTriangle(Ray &ray)
+float Scene::findIntersectedTriangle(Ray &ray)
 {
 	//CALL Triangle::rayIntersection(Ray &ray) for every triangle in the secene untill it returns true
 	//Then pass a reference to argument "ray" which <Triangle> that is intersected 
 	//aswell as the intersectionpoint <Vertex>.
 	float tClosest = INFINITY;
+
+	// intersection for triangles (room, tetras)
 	for (auto i = 0; i < _triangleList.size(); i++)
 	{
 		float t = _triangleList[i].rayIntersection(ray);
 		if (t < INFINITY && t >0.0 && t < tClosest)
 		{
+
 			ray._triangle = &_triangleList[i];
 			ray._color = _triangleList[i]._color;
 			tClosest = t;
+
 		}
 	}
+
+	return glm::distance(ray._start, ray._end);
+
+
+}
+
+float Scene::findIntersectedSphere(Ray &ray, ColorDbl &clr){
+	// intersection for spheres
+	float t;
+	float tClosest = INFINITY;
+	for(Sphere &s : _sphereList) {
+		t = s.sphereIntersection(ray);
+		if(t<tClosest){
+			tClosest = t;
+			clr = s.getColor();
+		}
+	}
+
+	if (tClosest < INFINITY)
+	{
+		//P = point on sphereIntersection, O = ray start, D = ray direction
+		//P = O + t*D
+		glm::vec3 P = glm::vec3(ray._start) + tClosest*glm::vec3(ray._dir);
+
+		return glm::distance(P, glm::vec3(ray._start));;
+
+
+	}
+	return INFINITY;
+
 }
 
 void Scene::addTetra(const float xPos, const float width, const float height, const float depth)

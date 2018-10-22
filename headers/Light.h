@@ -7,12 +7,20 @@
 #include "Scene.h"
 
 #include <vector>
-#include <list>
 
 
 class Light {
 
+public:
+
     Light();
+    std::vector<Triangle> getLightTriangles();
+
+private:
+
+    std::vector<Triangle> _lightTriangles;
+
+
 };
 
 

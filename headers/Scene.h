@@ -20,8 +20,11 @@ public:
 	std::vector<Triangle> getTriangles();
 	void addSphere(Sphere &s);
 	void addTetra(const float xPos, const float width, const float height, const float depth);
+	void importTriangles(std::vector<Triangle>);
 
-private:
+
+
+		private:
 
 	std::vector<Triangle> _triangleList;
 	std::vector<Sphere> _sphereList;

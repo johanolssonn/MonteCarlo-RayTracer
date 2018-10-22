@@ -113,39 +113,14 @@ std::vector<Triangle> Scene::getTriangles() {
 	return _triangleList;
 }
 
+void Scene::importTriangles(std::vector<Triangle> inTriangles) {
+
+	for( Triangle &t : inTriangles)
+	_triangleList.push_back(t);
+}
+
 void Scene::addSphere(Sphere &s) {
-
-    //add to sphere list...??
-
-    const double PI = 3.141592653589793238462643383279502884197;
-	const ColorDbl red(1.0, 0.0, 0.0);
-	std::vector<Vertex> sphereVerts;
-
-    // Iterate through phi, theta then convert r,theta,phi to  XYZ
-    for (double phi = 0.; phi < 2*PI; phi += PI/10.) // Azimuth [0, 2PI]
-    {
-        for (double theta = 0.; theta < PI; theta += PI/10.) // Elevation [0, PI]
-		{
-			Vertex vert;
-			vert[0] = s.getRadius() * cos(phi) * sin(theta) + s.getCenter().x;
-			vert[1] = s.getRadius() * sin(phi) * sin(theta) + s.getCenter().y;
-			vert[2] = s.getRadius() * cos(theta) + s.getCenter().z;
-
-			sphereVerts.push_back(vert);
-
-		}
-    }
-
-    // this is wrong af
-    for(int i = 0; 3 * i < sphereVerts.size();i++) {
-
-        Vertex p = sphereVerts[3 * i];
-        Vertex p1 = sphereVerts[3 * i + 1];
-        Vertex p2 = sphereVerts[3 * i + 2];
-
-        _triangleList.push_back(Triangle(p,p1,p2, red, CalculateSurfaceNormal(p,p1,p2)));
-    }
-
+    _sphereList.push_back(s);
 }
 
 Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, const Vertex &p3 ) const

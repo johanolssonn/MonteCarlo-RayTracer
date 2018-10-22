@@ -44,7 +44,12 @@ void Camera::render(Scene &scene) {
                 float b = scene.findIntersectedSphere(primary_ray, color); //DIST TO SPHERE
                 if(a<b) // If a triangle is closer than any sphere.
                 {
-                    color = primary_ray.getColor();
+
+					Light lightSource = scene.getLight();
+					Direction L = -lightSource.getDirection();
+					const Direction N = primary_ray._triangle->getNormal(); //Triangle normal at intersection point
+					//color = primary_ray.getColor() / M_PI * lightIntensity*lightColor * std::max(0.f, glm::dot(N, L));
+                   color = primary_ray.getColor();
                 }
                 else
 				{

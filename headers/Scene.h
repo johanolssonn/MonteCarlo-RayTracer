@@ -5,6 +5,7 @@
 #include "ColorDbl.h"
 #include "Triangle.h"
 #include "Sphere.h"
+#include "Light.h"
 
 #include <vector>
 #include <list>
@@ -22,7 +23,7 @@ public:
 	void addSphere(Sphere &s);
 	void addTetra(const float xPos, const float width, const float height, const float depth);
 	void importTriangles(std::vector<Triangle>);
-
+	Light getLight() { return _light; }
 
 
 		private:
@@ -30,6 +31,7 @@ public:
 	std::vector<Triangle> _triangleList;
 	std::vector<Sphere> _sphereList;
 	std::vector<Vertex> vertex_list;
+	Light _light;
 
 };
 

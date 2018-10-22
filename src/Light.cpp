@@ -18,6 +18,7 @@ Light::Light() {
     const Vertex d{ 6.0, -1.0, 4.99, 1.0 };
 
     const Direction normal( 0.0, 0.0, -1.0 );
+	_dir = normal;
     const ColorDbl white(1.0, 1.0, 1.0, LIGHTSOURCE);
 
     _lightTriangles.push_back(Triangle(a, d, c, white, normal));

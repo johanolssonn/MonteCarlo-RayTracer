@@ -4,7 +4,6 @@
 #include "Definitions.h"
 #include "ColorDbl.h"
 #include "Triangle.h"
-#include "Scene.h"
 
 #include <vector>
 
@@ -15,10 +14,12 @@ public:
 
     Light();
     std::vector<Triangle> getLightTriangles();
+	Direction getDirection() { return _dir; }
 
 private:
 
     std::vector<Triangle> _lightTriangles;
+	Direction _dir;
 
 
 };

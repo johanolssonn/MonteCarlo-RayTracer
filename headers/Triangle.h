@@ -13,6 +13,8 @@ struct Triangle {
 
 	float rayIntersection(Ray &ray);
 
+	const Direction getNormal() { return _normal; }
+
 
 	const Vertex _p1;
 	const Vertex _p2; 

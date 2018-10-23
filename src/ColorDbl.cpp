@@ -16,3 +16,24 @@ ColorDbl::ColorDbl(double r, double g, double b)
 
 ColorDbl::ColorDbl(double r, double g, double b,  int surfType)
 	: _r{ r }, _g{ g }, _b{ b }, _surfType{surfType} {}
+
+ColorDbl ColorDbl::reflect() {
+    
+    if(_surfType == LAMBERTIAN){
+        return diffuse();
+    }
+    else if(_surfType == SPECULAR) {
+        return specular();
+    }
+    
+}
+
+ColorDbl ColorDbl::specular() {
+    
+    return *this;
+}
+
+ColorDbl ColorDbl::diffuse() {
+    return *this * reflectionCoefficient / M_PI; //divided by PI to ensure the surface doesnt reflect more light than it receives
+}
+

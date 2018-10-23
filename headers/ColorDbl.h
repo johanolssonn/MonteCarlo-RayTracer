@@ -13,11 +13,18 @@ public:
 	~ColorDbl() = default;
 	ColorDbl operator/(float x) { return ColorDbl(_r / x, _g / x, _b / x); }
 	ColorDbl operator*(float x) { return ColorDbl(_r * x, _g * x, _b * x); }
+    
+    
+    ColorDbl reflect();
+    ColorDbl specular();
+    ColorDbl diffuse();
 	
 
 	double _r, _g, _b;
 	int _surfType = LAMBERTIAN;
 private:
+    
+    float reflectionCoefficient = 0.5;
 	
 };
 

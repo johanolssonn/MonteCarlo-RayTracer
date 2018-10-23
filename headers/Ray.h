@@ -13,6 +13,10 @@ public:
 	Ray(Vertex &start, Direction &dir);
 	~Ray() = default;
 
+
+
+	ColorDbl getColor() { return _color; }
+
 	Vertex _start;
 	Direction _dir;
 	Vertex _end;
@@ -20,7 +24,6 @@ public:
 	Triangle* _triangle;
 	float tMax = 20;
 
-	ColorDbl getColor() { return _color ;}
 private:
 	
 };

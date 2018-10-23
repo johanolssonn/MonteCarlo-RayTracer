@@ -24,6 +24,13 @@ public:
 	void addTetra(const float xPos, const float width, const float height, const float depth);
 	void importTriangles(std::vector<Triangle>);
 	Light getLight() { return _light; }
+	void logTrianglesTypes()
+	{
+		for (Triangle &t : _triangleList)
+		{
+			std::cout << "surfacetype = " << t.getColor()._surfType << std::endl;
+		}
+	}
 
 
 		private:

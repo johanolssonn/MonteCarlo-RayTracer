@@ -145,20 +145,25 @@ float Scene::findIntersectedTriangle(Ray &ray)
 	float tClosest = INFINITY;
 
 	// intersection for triangles (room, tetras)
-	for (auto i = 0; i < _triangleList.size(); i++)
+	for (Triangle &triangle : _triangleList)
 	{
-		float t = _triangleList[i].rayIntersection(ray);
-		if (t < INFINITY && t >0.0 && t < tClosest)
+		float t = triangle.rayIntersection(ray);
+		if (t < INFINITY && t > 0.0 && t < tClosest)
 		{
 
-			ray._triangle = &_triangleList[i];
-			ray._color = _triangleList[i]._color;
+			ray._triangle = &triangle;
+			ray._color = triangle._color;
 			tClosest = t;
-
 		}
 	}
 
-	return glm::distance(ray._start, ray._end);
+	if (tClosest < INFINITY)
+	{ 
+		ray._end = ray._start + Vertex(ray._dir, 1.0)*tClosest;
+		return glm::distance(ray._start, ray._end);
+	}
+	else
+		return INFINITY;
 
 
 }
@@ -181,7 +186,7 @@ float Scene::findIntersectedSphere(Ray &ray, ColorDbl &clr){
 		//P = O + t*D
 		glm::vec3 P = glm::vec3(ray._start) + tClosest*glm::vec3(ray._dir);
 
-		return glm::distance(P, glm::vec3(ray._start));;
+		return glm::distance(P, glm::vec3(ray._start));
 
 
 	}
@@ -194,12 +199,12 @@ void Scene::addTetra(const float xPos, const float width, const float height, co
 	Vertex ov(xPos, 0.0, 0.0, 1.0); //origin vertex
 	Vertex lv(xPos+depth, width/2, 0.0, 1.0); //left vertex
 	Vertex rv(xPos+depth, -width/2, 0.0, 1.0); //right vertex
-	Vertex tv(xPos, 0.0, height, 1.0); //top vertex
+	Vertex tv(xPos+depth, 0.0, height, 1.0); //top vertex
 
 
-	const ColorDbl red(1.0, 0.0, 0.0);
-	const ColorDbl yellow(1.0, 1.0, 0.0); 
-	const ColorDbl white(1.0, 1.0, 1.0);
+	const ColorDbl red(1.0, 0.0, 0.0, LAMBERTIAN);
+	const ColorDbl yellow(1.0, 1.0, 0.0, LAMBERTIAN); 
+	const ColorDbl white(1.0, 1.0, 1.0, LAMBERTIAN);
 	const Direction lWall = CalculateSurfaceNormal(ov, tv, lv); //LEFT WALL
 	_triangleList.push_back(Triangle(ov, tv, lv, red, lWall));
 

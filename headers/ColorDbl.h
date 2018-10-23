@@ -9,13 +9,14 @@ class ColorDbl {
 public:
 	ColorDbl(); //DEfault white
 	ColorDbl(double r, double g, double b); 
-	ColorDbl(double r, double g, double b, const int surfType);
+	ColorDbl(double r, double g, double b, int surfType);
 	~ColorDbl() = default;
 	ColorDbl operator/(float x) { return ColorDbl(_r / x, _g / x, _b / x); }
 	ColorDbl operator*(float x) { return ColorDbl(_r * x, _g * x, _b * x); }
+	
 
 	double _r, _g, _b;
-	int _surfType;
+	int _surfType = LAMBERTIAN;
 private:
 	
 };

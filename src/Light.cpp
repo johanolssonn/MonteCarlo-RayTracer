@@ -24,6 +24,8 @@ Light::Light() {
     _lightTriangles.push_back(Triangle(a, d, c, white, normal));
     _lightTriangles.push_back(Triangle(a, b, d, white, normal));
 
+	_center = glm::vec3(5.0, 0.0, 4.99);
+
 }
 
 std::vector<Triangle> Light::getLightTriangles() {

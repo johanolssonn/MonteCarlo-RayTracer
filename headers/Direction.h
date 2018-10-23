@@ -1,4 +1,4 @@
-#ifndef DIRECTION_H
+/*#ifndef DIRECTION_H
 #define DIRECTION_H
 
 #include <math.h>
@@ -12,4 +12,4 @@ struct Direction {
 	float _x, _y, _z;
 };
 
-#endif //DIRECTION_H
+#endif //DIRECTION_H*/

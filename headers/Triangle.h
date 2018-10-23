@@ -14,6 +14,8 @@ struct Triangle {
 	float rayIntersection(Ray &ray);
 
 	const Direction getNormal() { return _normal; }
+	const ColorDbl getColor() {return _color;}
+	int getSurfaceType() { return _color._surfType; }
 
 
 	const Vertex _p1;

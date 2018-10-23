@@ -14,8 +14,7 @@ public:
 	~Camera() {
 		delete [] _pixelArray;
 	}
-	
-	ColorDbl trace(const Direction &rayorig, const Direction &raydir,const std::vector<Triangle> &triangles,const int &depth);
+	bool trace(Ray &ray, std::vector<Triangle> &triangles);//,const int &depth);
 	void render(Scene&);
 	void createImage(Scene&);
 	void imageToFile();
@@ -27,6 +26,4 @@ private:
 	double clamp(double v, double lo, double hi);
 	bool _useEyePoint1;
 	Vertex _eyePoint;
-	
-
 };

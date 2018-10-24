@@ -29,22 +29,23 @@
 	 if (depth > MAXDEPTH) { return clr; }
 	 else
 	 {
-		 float a = scene.findIntersectedTriangle(ray); //DIST TO TRIANGLE
+		 float a = scene.findIntersection(ray); //DIST TO TRIANGLE
 		 //float b = scene.findIntersectedSphere(ray); //DIST TO SPHERE
 		 //if (a < b && a < INFINITY && ray._triangle->getSurfaceType() == LAMBERTIAN) // If a triangle is closer than any sphere.
-		 if (a < INFINITY && ray._triangle->getSurfaceType() == LAMBERTIAN) // If a triangle is closer than any sphere.
+		 if (a < INFINITY && ray._color._surfType == LAMBERTIAN) // If a triangle is closer than any sphere.
 		 {
-			 const Direction normal = ray._triangle->getNormal(); //Triangle normal at intersection point
+			 const Direction normal = ray._hitNormal; //Triangle normal at intersection point
 			 Vertex hitPoint = ray._end;
 			 Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
 			 hitPoint += Vertex((float)0.01 * normal, 1.0);
 			 Ray shadow_ray(hitPoint, lightDir); // Create a shadow ray with intersectionpoint as start and direction towards light as direction.
 							
 			 
-			 float c = scene.findIntersectedTriangle(shadow_ray);
+			 float c = scene.findIntersection(shadow_ray);
 			 const int intersectedTriangleType = shadow_ray.getColor()._surfType;
 			 if (intersectedTriangleType == LIGHTSOURCE)
 			 {
+
 				 return ray.getColor() * std::max(0.f, glm::dot(normal, lightDir));
 			 }
 			 else { return ColorDbl(0.0, 0.0, 0.0); }
@@ -52,10 +53,10 @@
 			 //color = primary_ray.getColor();
 
 		 }
-		 else if (a < INFINITY && ray._triangle->getSurfaceType() == SPECULAR)
+		 else if (a < INFINITY && ray._color._surfType == SPECULAR)
 		 {
 			 //recursive
-			 const Direction normal = ray._triangle->getNormal(); //Triangle normal at intersection point
+			 const Direction normal = ray._hitNormal; //Triangle normal at intersection point
 			 Direction R = reflect(ray._dir, normal);
 			 Vertex hitPoint = ray._end;
 			 hitPoint += Vertex((float)0.01 * normal, 1.0);
@@ -93,7 +94,8 @@ void Camera::render(Scene &scene) {
 
 				Light lightSource = scene.getLight();
 				ColorDbl color(0.0, 0.0, 0.0);
-				*_pixelBuffer = Pixel(castRay(scene, primary_ray, lightSource, color, 0));
+				ColorDbl finalColor = castRay(scene, primary_ray, lightSource, color, 0);
+				*_pixelBuffer = Pixel(finalColor);
 			}
 		}
 		_pixelBuffer = _pixelArray; //Reset the buffer to beginning of _pixelArray

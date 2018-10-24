@@ -22,6 +22,7 @@ public:
 	Vertex _end;
 	ColorDbl _color;
 	Triangle* _triangle;
+	Direction _hitNormal;
 	float tMax = 20;
 
 private:

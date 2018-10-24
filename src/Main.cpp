@@ -9,7 +9,7 @@
 int main () {
 
 	Scene sc;
-	Sphere sphere1 = Sphere(glm::vec3(4.0f, -2.0f, 0.0f), 1.0f, ColorDbl(0,1,0));
+	Sphere sphere1 = Sphere(glm::vec3(4.0f, -2.0f, -3.49f), 1.5f, ColorDbl(0,1,0));
 
 	sc.createScene();
 	sc.addTetra(4.0, 3.0, 3.0, 2.0);

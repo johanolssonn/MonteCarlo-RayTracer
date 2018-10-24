@@ -17,8 +17,7 @@ public:
 	void createScene();
 
 	Direction CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, const Vertex &p3) const;
-	float findIntersectedTriangle(Ray &arg);
-	float findIntersectedSphere(Ray &arg);
+	float findIntersection(Ray &arg);
 	std::vector<Triangle> getTriangles();
 	void addSphere(Sphere &s);
 	void addTetra(const float xPos, const float width, const float height, const float depth);

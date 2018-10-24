@@ -52,7 +52,7 @@ void Scene::createScene()
 
 	const ColorDbl white(1.0, 1.0, 1.0); //Default constructor gives white color
 	const ColorDbl red(1.0, 0.0, 0.0); 	//RIGHT WALL
-	const ColorDbl green(0.0, 1.0, 0.0); //LEFT WALL
+	const ColorDbl green(0.0, 1.0, 0.0,SPECULAR); //LEFT WALL
 	const ColorDbl blue(0.0, 0.0, 1.0);	 //RIGHT BACK WALL
 	const ColorDbl yellow(1.0, 1.0, 0.0); //LEFT BACK WALL
 	const ColorDbl gray(0.5, 0.5, 0.5, SPECULAR); //RIGHT FRONT WALL
@@ -137,60 +137,47 @@ Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, cons
 	return Normal;
 };
 
-float Scene::findIntersectedTriangle(Ray &ray)
+float Scene::findIntersection(Ray &ray)
 {
 	//CALL Triangle::rayIntersection(Ray &ray) for every triangle in the secene untill it returns true
 	//Then pass a reference to argument "ray" which <Triangle> that is intersected 
 	//aswell as the intersectionpoint <Vertex>.
 	float tClosest = INFINITY;
+	float t = INFINITY;
+	Ray tempRay = ray;
 
 	// intersection for triangles (room, tetras)
 	for (Triangle &triangle : _triangleList)
 	{
-		float t = triangle.rayIntersection(ray);
+		t = triangle.rayIntersection(ray);
 		if (t < INFINITY && t > 0.0 && t < tClosest)
 		{
 
-			ray._triangle = &triangle;
-			ray._color = triangle._color;
+			tempRay._triangle = &triangle;
+			tempRay._color = triangle._color;
+			tempRay._hitNormal = triangle.getNormal();
 			tClosest = t;
 		}
 	}
 
-	if (tClosest < INFINITY)
-	{ 
-		ray._end = ray._start + Vertex(ray._dir, 1.0)*tClosest;
-		return glm::distance(ray._start, ray._end);
-	}
-	else
-		return INFINITY;
-
-
-}
-
-float Scene::findIntersectedSphere(Ray &ray){
-	// intersection for spheres
-	float t;
-	float tClosest = INFINITY;
 	for(Sphere &s : _sphereList) {
 		t = s.sphereIntersection(ray);
 		if(t<tClosest){
 			tClosest = t;
-			ray._color = s.getColor();
+			tempRay._color = s.getColor();
+			tempRay._hitNormal = glm::normalize(glm::vec3(ray._start) + tClosest*glm::vec3(ray._dir) - s.getCenter());
 		}
 	}
 
 	if (tClosest < INFINITY)
 	{
-		//P = point on sphereIntersection, O = ray start, D = ray direction
-		//P = O + t*D
-		glm::vec3 P = glm::vec3(ray._start) + tClosest*glm::vec3(ray._dir);
-
-		return glm::distance(P, glm::vec3(ray._start));
-
-
+		ray = tempRay;
+		ray._end = ray._start + Vertex(ray._dir, 1.0)*tClosest;
+		return tClosest;
 	}
-	return INFINITY;
+	else
+		return INFINITY;
+
 
 }
 

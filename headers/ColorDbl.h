@@ -12,7 +12,7 @@ public:
 	ColorDbl(double r, double g, double b, int surfType);
 	~ColorDbl() = default;
 
-	ColorDbl operator+(ColorDbl &rhs) { return ColorDbl(_r + rhs._r, _g + rhs._g, _b + rhs._b); }
+	ColorDbl operator+(ColorDbl rhs) { return ColorDbl(_r + rhs._r, _g + rhs._g, _b + rhs._b); }
 	ColorDbl operator/(float x) { return ColorDbl(_r / x, _g / x, _b / x); }
 	ColorDbl operator*(float x) { return ColorDbl(_r * x, _g * x, _b * x); }
     

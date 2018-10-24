@@ -12,7 +12,7 @@ int main () {
 	Sphere sphere1 = Sphere(glm::vec3(4.0f, -2.0f, 0.0f), 1.0f, ColorDbl(0,1,0));
 
 	sc.createScene();
-	sc.addTetra(7.0, 3.0, 2.0, 2.0);
+	sc.addTetra(4.0, 3.0, 3.0, 2.0);
 
     Light light;
     sc.importTriangles(light.getLightTriangles());

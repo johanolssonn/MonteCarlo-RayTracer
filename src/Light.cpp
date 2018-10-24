@@ -20,6 +20,7 @@ Light::Light() {
     const Direction normal( 0.0, 0.0, -1.0 );
 	_dir = normal;
     const ColorDbl white(1.0, 1.0, 1.0, LIGHTSOURCE);
+	_color = white;
 
     _lightTriangles.push_back(Triangle(a, d, c, white, normal));
     _lightTriangles.push_back(Triangle(a, b, d, white, normal));

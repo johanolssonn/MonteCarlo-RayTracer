@@ -55,7 +55,7 @@ void Scene::createScene()
 	const ColorDbl green(0.0, 1.0, 0.0); //LEFT WALL
 	const ColorDbl blue(0.0, 0.0, 1.0);	 //RIGHT BACK WALL
 	const ColorDbl yellow(1.0, 1.0, 0.0); //LEFT BACK WALL
-	const ColorDbl gray(0.5, 0.5, 0.5); //RIGHT FRONT WALL
+	const ColorDbl gray(0.5, 0.5, 0.5, SPECULAR); //RIGHT FRONT WALL
 	const ColorDbl orange(1.0, 0.65, 0.0); //LEFT FRONT WALL (actually green)
 
 	//FLOOR
@@ -168,7 +168,7 @@ float Scene::findIntersectedTriangle(Ray &ray)
 
 }
 
-float Scene::findIntersectedSphere(Ray &ray, ColorDbl &clr){
+float Scene::findIntersectedSphere(Ray &ray){
 	// intersection for spheres
 	float t;
 	float tClosest = INFINITY;
@@ -176,7 +176,7 @@ float Scene::findIntersectedSphere(Ray &ray, ColorDbl &clr){
 		t = s.sphereIntersection(ray);
 		if(t<tClosest){
 			tClosest = t;
-			clr = s.getColor();
+			ray._color = s.getColor();
 		}
 	}
 
@@ -196,25 +196,23 @@ float Scene::findIntersectedSphere(Ray &ray, ColorDbl &clr){
 
 void Scene::addTetra(const float xPos, const float width, const float height, const float depth)
 {
-	Vertex ov(xPos, 0.0, 0.0, 1.0); //origin vertex
-	Vertex lv(xPos+depth, width/2, 0.0, 1.0); //left vertex
-	Vertex rv(xPos+depth, -width/2, 0.0, 1.0); //right vertex
-	Vertex tv(xPos+depth, 0.0, height, 1.0); //top vertex
+	Vertex ov(xPos, 2.0, -4.99, 1.0); //origin vertex
+	Vertex lv(xPos+depth+1.0, 2.0 + width/2, -4.99, 1.0); //left vertex
+	Vertex rv(xPos+depth, 2.0 -width/2, -4.99, 1.0); //right vertex
+	Vertex tv(xPos+depth, 3.0, -4.99 + height, 1.0); //top vertex
 
 
-	const ColorDbl red(1.0, 0.0, 0.0, LAMBERTIAN);
-	const ColorDbl yellow(1.0, 1.0, 0.0, LAMBERTIAN); 
-	const ColorDbl white(1.0, 1.0, 1.0, LAMBERTIAN);
+	const ColorDbl purple(0.73, 0.33, 0.83, LAMBERTIAN);
 	const Direction lWall = CalculateSurfaceNormal(ov, tv, lv); //LEFT WALL
-	_triangleList.push_back(Triangle(ov, tv, lv, red, lWall));
+	_triangleList.push_back(Triangle(ov, tv, lv, purple, lWall));
 
 	const Direction rWall = CalculateSurfaceNormal(ov, rv, tv); //RIGHT WALL
-	_triangleList.push_back(Triangle(ov, rv, tv, yellow, rWall));
+	_triangleList.push_back(Triangle(ov, rv, tv, purple, rWall));
 
 	const Direction bWall = CalculateSurfaceNormal(lv, tv, rv); //BACK WALL
-	_triangleList.push_back(Triangle(lv, tv, rv, white, bWall));
+	_triangleList.push_back(Triangle(lv, tv, rv, purple, bWall));
 
 	const Direction floor = CalculateSurfaceNormal(ov, lv, rv); //FLOOR
-	_triangleList.push_back(Triangle(ov, lv, rv, white, floor));
+	_triangleList.push_back(Triangle(ov, lv, rv, purple, floor));
 }
 

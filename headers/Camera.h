@@ -7,6 +7,7 @@
 
 const int WIDTH = 800;
 const int HEIGHT = 800;
+const int MAXDEPTH = 2;
 
 class Camera {
 public:
@@ -18,6 +19,8 @@ public:
 	void render(Scene&);
 	void createImage(Scene&);
 	void imageToFile();
+	ColorDbl castRay(Scene &scene, Ray &ray, Light &lightSource, ColorDbl &clr, int depth);
+	Direction reflect(Direction &I, const Direction &N);
 
 	Pixel *_pixelArray = new Pixel[WIDTH * HEIGHT];
 	Pixel *_pixelBuffer = _pixelArray;

@@ -16,12 +16,14 @@ public:
     std::vector<Triangle> getLightTriangles();
 	Direction getDirection() { return _dir; }
 	glm::vec3 getCenter() { return _center; }
+	ColorDbl getColor() { return _color; }
 
 private:
 
     std::vector<Triangle> _lightTriangles;
 	Direction _dir;
 	glm::vec3 _center;
+	ColorDbl _color;
 
 
 };

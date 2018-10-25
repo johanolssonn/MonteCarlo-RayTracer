@@ -25,6 +25,7 @@ public:
 	Direction _hitNormal;
 	float tMax = 20;
 
+
 private:
 	
 };

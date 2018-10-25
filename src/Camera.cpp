@@ -6,7 +6,7 @@
 	 if (useEyePoint1)
 		 _eyePoint = Vertex{ -2.0, 0.0, 0.0, 0.0 }; //e1
 	 else
-	 	 _eyePoint = Vertex{ -0.5, 0.0, 0.0, 0.0 }; //e2
+	 	 _eyePoint = Vertex{ -1.0, 0.0, 0.0, 0.0 }; //e2
  }
 
  void Camera::createImage(Scene &scene)
@@ -24,6 +24,41 @@
 	 return I - 2 * glm::dot(I, N) * N;
  }
 
+Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(0.0, 1.0);
+
+    float rand1 = dis(gen);
+    float rand2 = dis(gen);
+
+    float theta = acos(sqrt(1.0 - rand1));
+    float phi = 2.0 * M_PI * rand2;
+
+    float xs = sin(theta) * cos(phi);
+    float ys = cos(theta);
+   	float zs = sin(theta) * sin(phi);
+
+    glm::vec3 y = hitNormal;
+    glm::vec3 h = y; //will be modified
+
+    if(abs(h.x) <= abs(h.y) && abs(h.x) <= abs(h.z))
+        h.x = 1.0;
+    else if(abs(h.y) <= abs(h.x) && abs(h.y) <= abs(h.z))
+        h.y = 1.0;
+    else
+        h.z = 1.0;
+
+    glm::vec3 x = normalize(cross(h,y));
+    glm::vec3 z = normalize(cross(h,y));
+
+    Direction randDirection = glm::normalize(xs * x + ys * y + zs * z);
+	//hitPos += Vertex((float)0.01 * hitNormal, 1.0);
+    return Ray(hitPos, randDirection);
+
+}
+
  ColorDbl Camera::castRay(Scene &scene, Ray &ray, Light &lightSource, ColorDbl &clr,  int depth) {
 
 	 if (depth > MAXDEPTH) { return clr; }
@@ -39,16 +74,36 @@
 			 Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
 			 hitPoint += Vertex((float)0.01 * normal, 1.0);
 			 Ray shadow_ray(hitPoint, lightDir); // Create a shadow ray with intersectionpoint as start and direction towards light as direction.
-							
-			 
+
+			 // RADIOSITY
+			 Ray radioRay = sampleHemisphere(hitPoint, normal);
+
+			 //std::cout << "ray: " << radioRay._dir.x << radioRay._dir.y << radioRay._dir.z;
+
+			 float angle = glm::angle(radioRay._dir, normal);
+
+			 //std::cout << "angle: " << angle;
+
+			 //std::cout << "PreColor: " << ray.getColor();
+
+
+			 ColorDbl emittance = ray._color.diffuse() * cos(angle);
+
+			 //std::cout << "PostColor: " << ray.getColor();
+
+			 //std::cout << "Emittance: " << emittance;
+
+			 //double r = emittance._r, g = emittance._g, b = emittance._b;
+
+
 			 float c = scene.findIntersection(shadow_ray);
 			 const int intersectedTriangleType = shadow_ray.getColor()._surfType;
 			 if (intersectedTriangleType == LIGHTSOURCE)
 			 {
 
-				 return ray.getColor() * std::max(0.f, glm::dot(normal, lightDir));
+				 return ray.getColor() * std::max(0.f, glm::dot(normal, lightDir)) + emittance;
 			 }
-			 else { return ColorDbl(0.0, 0.0, 0.0); }
+			 else { return ColorDbl(0.0, 0.0, 0.0) + emittance; }
 			 //color = primary_ray.getColor() / M_PI * lightIntensity*lightColor * std::max(0.f, glm::dot(N, L))/*;*/
 			 //color = primary_ray.getColor();
 
@@ -88,7 +143,7 @@ void Camera::render(Scene &scene) {
 				float y = (1 - 2 * (i + 0.5) / (float)WIDTH)*scale;
 				float z = (1 - 2 * (j + 0.5) / (float)HEIGHT)*scale;
 				Vertex ray_origin = _eyePoint;
-				Direction ray_dir = Direction{ 1.0, y,z } -Direction{ ray_origin };
+				Direction ray_dir = Direction{ 0.0, y,z } -Direction{ ray_origin };
 				ray_dir = glm::normalize(ray_dir);
 				Ray primary_ray(ray_origin, ray_dir);
 

@@ -4,10 +4,11 @@
 #include "Scene.h"
 #include <array>
 #include <fstream>
+#include <random>
 
-const int WIDTH = 800;
-const int HEIGHT = 800;
-const int MAXDEPTH = 3;
+const int WIDTH = 600;
+const int HEIGHT = 600;
+const int MAXDEPTH = 2;
 
 class Camera {
 public:
@@ -21,6 +22,7 @@ public:
 	void imageToFile();
 	ColorDbl castRay(Scene &scene, Ray &ray, Light &lightSource, ColorDbl &clr, int depth);
 	Direction reflect(Direction &I, const Direction &N);
+    Ray sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal);
 
 	Pixel *_pixelArray = new Pixel[WIDTH * HEIGHT];
 	Pixel *_pixelBuffer = _pixelArray;

@@ -37,3 +37,9 @@ ColorDbl ColorDbl::diffuse() {
     return *this * reflectionCoefficient / M_PI; //divided by PI to ensure the surface doesnt reflect more light than it receives
 }
 
+std::ostream& operator<<(std::ostream& os, const ColorDbl &c)
+{
+    os << "Color = { " << c._r << ", " << c._g << ", " << c._b << " } " << std::endl;
+    return os;
+};
+

@@ -144,7 +144,7 @@ void Camera::render(Scene &scene) {
 				float y = (1 - 2 * (i + 0.5) / (float)WIDTH)*scale;
 				float z = (1 - 2 * (j + 0.5) / (float)HEIGHT)*scale;
 				Vertex ray_origin = _eyePoint;
-				Direction viewDirection = glm::normalize(-_eyePoint);
+				Direction viewDirection(1.0, 0.0, 0.0);
 				//Direction ray_dir = Direction{ 0.0, y,z } -Direction{ ray_origin };
 				Direction ray_dir = glm::normalize(viewDirection + glm::vec3(0.0, y, z));
 				Ray primary_ray(ray_origin, ray_dir);

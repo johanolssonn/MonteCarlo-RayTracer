@@ -6,9 +6,9 @@
 #include <fstream>
 #include <random>
 
-const int WIDTH = 800;
-const int HEIGHT = 800;
-const int MAXDEPTH = 4;
+const int WIDTH = 400;
+const int HEIGHT = 400;
+const int MAXDEPTH = 2;
 
 class Camera {
 public:

@@ -204,3 +204,27 @@ void Scene::addTetra(const float xPos, const float width, const float height, co
 	_triangleList.push_back(Triangle(ov, lv, rv, purple, floor));
 }
 
+ColorDbl Scene::getLightIntensity(Vertex &hitpoint, const Direction &hitnormal, Direction &shadowRay)
+{
+
+	double lightDistance = glm::distance(glm::vec3(hitpoint), _light.getCenter());
+	// calc geometric term
+	double alpha = glm::dot(-hitnormal, shadowRay);
+	double beta = clamp((double)glm::dot(_light.getDirection(), -shadowRay), 0.0, 1.0);
+	double geometric = abs(alpha * beta / pow(lightDistance, 2.0));
+	ColorDbl clr = _light.getColor() * _light.getEmission() * geometric;
+
+	return clr * _light.getLightArea();
+}
+
+double Scene::clamp(double v, double lo, double hi)
+{
+	if (v < lo)
+		return lo;
+
+	else if (v > hi)
+		return hi;
+
+	else
+		return v;
+}

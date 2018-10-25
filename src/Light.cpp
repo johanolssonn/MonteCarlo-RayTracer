@@ -27,6 +27,10 @@ Light::Light() {
 
 	_center = glm::vec3(5.0, 0.0, 4.99);
 
+	_emission = ColorDbl(20.0, 20.0, 20.0);
+
+	_area = glm::distance(a, b) * glm::distance(a, c);
+
 }
 
 std::vector<Triangle> Light::getLightTriangles() {

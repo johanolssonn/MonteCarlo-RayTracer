@@ -95,15 +95,16 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 
 			 //double r = emittance._r, g = emittance._g, b = emittance._b;
 
-
+			 ColorDbl lightIntensity = scene.getLightIntensity(hitPoint, normal, lightDir);
+			 //std::cout << lightIntensity;
 			 float c = scene.findIntersection(shadow_ray);
 			 const int intersectedTriangleType = shadow_ray.getColor()._surfType;
 			 if (intersectedTriangleType == LIGHTSOURCE)
 			 {
-
-				 return ray.getColor() * std::max(0.f, glm::dot(normal, lightDir)) + emittance;
+				 return ray.getColor() * lightIntensity;// +emittance;
 			 }
-			 else { return ColorDbl(0.0, 0.0, 0.0) + emittance; }
+			 else {
+				 return ColorDbl(0.0, 0.0, 0.0); }// + emittance; }
 			 //color = primary_ray.getColor() / M_PI * lightIntensity*lightColor * std::max(0.f, glm::dot(N, L))/*;*/
 			 //color = primary_ray.getColor();
 
@@ -150,6 +151,10 @@ void Camera::render(Scene &scene) {
 				Light lightSource = scene.getLight();
 				ColorDbl color(0.0, 0.0, 0.0);
 				ColorDbl finalColor = castRay(scene, primary_ray, lightSource, color, 0);
+
+				finalColor /= (double)(3 * 2 * 2);
+				double maximum = 0.0;
+				maximum = glm::max(maximum, glm::max(finalColor._r, glm::max(finalColor._g, finalColor._b)));
 				*_pixelBuffer = Pixel(finalColor);
 			}
 		}
@@ -163,23 +168,12 @@ void Camera::imageToFile()
 	img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
 	for (uint32_t i = 0; i < WIDTH* HEIGHT; ++i, ++_pixelBuffer) {
 		ColorDbl clr = _pixelBuffer->_color;
-		char r = (char)(255 * clamp(clr._r, 0, 1));
-		char g = (char)(255 * clamp(clr._g, 0, 1));
-		char b = (char)(255 * clamp(clr._b, 0, 1));
+		char r = (char)(255 * Scene::clamp(clr._r, 0, 1));
+		char g = (char)(255 * Scene::clamp(clr._g, 0, 1));
+		char b = (char)(255 * Scene::clamp(clr._b, 0, 1));
 
 		img << r << g << b;
 	}
 	img.close();
 }
 
-double Camera::clamp(double v, double lo, double hi)
-{
-	if (v < lo)
-		return lo;
-
-	else if (v > hi)
-		return hi;
-	
-	else
-		return v;
-}

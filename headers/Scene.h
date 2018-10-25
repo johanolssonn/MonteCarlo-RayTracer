@@ -23,6 +23,7 @@ public:
 	void addTetra(const float xPos, const float width, const float height, const float depth);
 	void importTriangles(std::vector<Triangle>);
 	Light getLight() { return _light; }
+	ColorDbl getLightIntensity(Vertex &hitpoint, const Direction &hitnormal, Direction &shadowRay);
 	void logTrianglesTypes()
 	{
 		for (Triangle &t : _triangleList)
@@ -31,6 +32,7 @@ public:
 		}
 	}
 
+	static double clamp(double v, double lo, double hi);
 
 		private:
 

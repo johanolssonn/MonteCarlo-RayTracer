@@ -59,9 +59,9 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 
 }
 
- ColorDbl Camera::castRay(Scene &scene, Ray &ray, Light &lightSource, ColorDbl &clr,  int depth) {
+ ColorDbl Camera::castRay(Scene &scene, Ray &ray, Light &lightSource,  int depth) {
 
-	 if (depth > MAXDEPTH) { return clr; }
+	 if (depth > MAXDEPTH) { return ray.getColor(); }
 	 else
 	 {
 		 float a = scene.findIntersection(ray); //DIST TO TRIANGLE
@@ -86,8 +86,8 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 
 			 //std::cout << "PreColor: " << ray.getColor();
 
-
-			 ColorDbl emittance = ray._color.diffuse() * cos(angle);
+			 //ColorDbl radioRayClr = castRay(scene, radioRay, lightSource, depth + 1);
+			 ColorDbl emittance = ray.getColor().diffuse() * cos(angle);
 
 			 //std::cout << "PostColor: " << ray.getColor();
 
@@ -101,10 +101,10 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 			 const int intersectedTriangleType = shadow_ray.getColor()._surfType;
 			 if (intersectedTriangleType == LIGHTSOURCE)
 			 {
-				 return ray.getColor() * lightIntensity;// +emittance;
+				 return ray.getColor() * lightIntensity + emittance;
 			 }
 			 else {
-				 return ColorDbl(0.0, 0.0, 0.0); }// + emittance; }
+				 return ColorDbl(0.0, 0.0, 0.0) + emittance; }
 			 //color = primary_ray.getColor() / M_PI * lightIntensity*lightColor * std::max(0.f, glm::dot(N, L))/*;*/
 			 //color = primary_ray.getColor();
 
@@ -117,7 +117,7 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 			 Vertex hitPoint = ray._end;
 			 hitPoint += Vertex((float)0.01 * normal, 1.0);
 			 Ray reflection_ray(hitPoint, R);
-			 return clr + castRay(scene, reflection_ray, lightSource, clr, depth + 1)*(float)0.8;
+			 return castRay(scene, reflection_ray, lightSource, depth + 1)*(float)0.8;
 		 }
 		/* else if (b < a && b < INFINITY && ray._triangle->getSurfaceType() == LAMBERTIAN) //IF THE RAY HITS A SPHERE
 		 {
@@ -149,8 +149,8 @@ void Camera::render(Scene &scene) {
 				Ray primary_ray(ray_origin, ray_dir);
 
 				Light lightSource = scene.getLight();
-				ColorDbl color(0.0, 0.0, 0.0);
-				ColorDbl finalColor = castRay(scene, primary_ray, lightSource, color, 0);
+				//ColorDbl color(0.0, 0.0, 0.0);
+				ColorDbl finalColor = castRay(scene, primary_ray, lightSource, 0);
 
 				finalColor /= (double)(3 * 2 * 2);
 				double maximum = 0.0;

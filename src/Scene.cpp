@@ -51,12 +51,11 @@ void Scene::createScene()
 
 
 	const ColorDbl white(1.0, 1.0, 1.0); //Default constructor gives white color
-    const ColorDbl white2(1.0, 1.0, 1.0);
 	const ColorDbl red(1.0, 0.0, 0.0); 	//RIGHT WALL
 	const ColorDbl green(0.0, 1.0, 0.0); //LEFT WALL
 	const ColorDbl blue(0.0, 0.0, 1.0);	 //RIGHT BACK WALL
 	const ColorDbl yellow(1.0, 1.0, 0.0); //LEFT BACK WALL
-	const ColorDbl gray(0.5, 0.5, 0.5, SPECULAR); //RIGHT FRONT WALL
+	const ColorDbl mirror(0.0, 0.0, 0.0, SPECULAR); //RIGHT FRONT WALL
 	const ColorDbl orange(1.0, 0.65, 0.0); //LEFT FRONT WALL
 
 	//FLOOR
@@ -100,8 +99,8 @@ void Scene::createScene()
 
 	//RIGHT FRONT WALL
 	const Direction rfWall_norm = CalculateSurfaceNormal(e_floor, e_ceiling, d_floor);
-	_triangleList.push_back(Triangle(e_floor, e_ceiling, d_floor, gray, rfWall_norm));
-	_triangleList.push_back(Triangle(e_ceiling, d_ceiling, d_floor, gray, rfWall_norm));
+	_triangleList.push_back(Triangle(e_floor, e_ceiling, d_floor, mirror, rfWall_norm));
+	_triangleList.push_back(Triangle(e_ceiling, d_ceiling, d_floor, mirror, rfWall_norm));
 
 	//LEFT FRONT WALL
 	const Direction lfWall_norm = CalculateSurfaceNormal(c_floor, d_floor, c_ceiling);

@@ -72,54 +72,72 @@
 
  ColorDbl Camera::castRay(Scene &scene, Ray &ray, Light &lightSource, int depth) {
 
-	 if (depth > MAXDEPTH) { return ray.getColor(); }
-	 else
-	 {
-		 float closestIntersection = scene.findIntersection(ray); //DIST TO TRIANGLE
-		 if (closestIntersection < INFINITY && ray._color._surfType == LAMBERTIAN) // If a triangle is closer than any sphere.
+	 if (depth > MAXDEPTH )//|| russian roulette 
+	 { 
+		 const Direction normal = ray._hitNormal; //Triangle normal at intersection point
+		 Vertex hitPoint = ray._start;
+		 //SHADOW RAY
+		 Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
+		 hitPoint += Vertex((float)0.01 * normal, 1.0);
+		 Ray shadow_ray(hitPoint, lightDir); // Create a shadow ray with intersectionpoint as start and direction towards light as direction.
+
+		 ColorDbl lightIntensity = scene.getLightIntensity(hitPoint, normal, lightDir);
+		 float c = scene.findIntersection(shadow_ray);
+		 const int intersectedTriangleType = shadow_ray.getColor()._surfType;
+		 if (intersectedTriangleType == LIGHTSOURCE)
 		 {
-			 const Direction normal = ray._hitNormal; //Triangle normal at intersection point
-			 Vertex hitPoint = ray._end;
-			 // RADIOSITY
-			 Ray radioRay = sampleHemisphere(hitPoint, normal);
-			 radioRay._color = ColorDbl(0.0, 0.0, 0.0);
-			 float angle = glm::angle(radioRay._dir, normal);
-			 ColorDbl radioRayClr = castRay(scene, radioRay, lightSource, depth + 1);
-			 ColorDbl emittance = radioRayClr.diffuse() * cos(angle);
-			 //SHADOW RAY
-			 Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
-			 hitPoint += Vertex((float)0.01 * normal, 1.0);
-			 Ray shadow_ray(hitPoint, lightDir); // Create a shadow ray with intersectionpoint as start and direction towards light as direction.
 
-			 ColorDbl lightIntensity = scene.getLightIntensity(hitPoint, normal, lightDir);
-			 float c = scene.findIntersection(shadow_ray);
-			 const int intersectedTriangleType = shadow_ray.getColor()._surfType;
-
-			 if (intersectedTriangleType == LIGHTSOURCE)
-			 {
-				 
-				 return ray.getColor() * lightIntensity + emittance;
-			 }
-			 else {
-				 return ColorDbl(0.0, 0.0, 0.0) + emittance;
-			 }
-
+			 return ray.getColor().diffuse() * lightIntensity;
 		 }
-		 else if (closestIntersection < INFINITY && ray._color._surfType == SPECULAR)
-		 {
-			 //recursive
-			 const Direction normal = ray._hitNormal; //Triangle normal at intersection point
-			 Direction R = reflect(ray._dir, normal);
-			 Vertex hitPoint = ray._end;
-			 hitPoint += Vertex((float)0.01 * normal, 1.0);
-			 Ray reflection_ray(hitPoint, R);
-			 return castRay(scene, reflection_ray, lightSource, depth).specular();
-		 }
-		 else //IF THE RAY HITS A LIGHTSOURCE
-		 {
-			 return lightSource.getColor();
+		 else {
+			 return ColorDbl(0.0, 0.0, 0.0);
 		 }
 	 }
+	float closestIntersection = scene.findIntersection(ray); //DIST TO TRIANGLE
+	if (closestIntersection < INFINITY && ray._color._surfType == LAMBERTIAN) // If a triangle is closer than any sphere.
+	{
+		const Direction normal = ray._hitNormal; //Triangle normal at intersection point
+		Vertex hitPoint = ray._end;
+		// RADIOSITY
+		Ray radioRay = sampleHemisphere(hitPoint, normal);
+		radioRay._hitNormal = normal;
+		radioRay._color = ColorDbl(0.0, 0.0, 0.0);
+		float angle = glm::angle(radioRay._dir, normal);
+		ColorDbl radioRayClr = castRay(scene, radioRay, lightSource, depth + 1);
+		ColorDbl emittance = (radioRay.getColor()._surfType != LIGHTSOURCE) ? radioRayClr * cos(angle) : ColorDbl(0.0, 0.0, 0.0);
+		//SHADOW RAY
+		Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
+		hitPoint += Vertex((float)0.01 * normal, 1.0);
+		Ray shadow_ray(hitPoint, lightDir); // Create a shadow ray with intersectionpoint as start and direction towards light as direction.
+
+		ColorDbl lightIntensity = scene.getLightIntensity(hitPoint, normal, lightDir);
+		float c = scene.findIntersection(shadow_ray);
+		const int intersectedTriangleType = shadow_ray.getColor()._surfType;
+
+		if (intersectedTriangleType == LIGHTSOURCE)
+		{
+				 
+			return ray.getColor().diffuse() * lightIntensity + emittance;
+		}
+		else {
+			return ColorDbl(0.0, 0.0, 0.0) + emittance;
+		}
+	}
+	else if (closestIntersection < INFINITY && ray._color._surfType == SPECULAR)
+	{
+		//recursive
+		const Direction normal = ray._hitNormal; //Triangle normal at intersection point
+		Direction R = reflect(ray._dir, normal);
+		Vertex hitPoint = ray._end;
+		hitPoint += Vertex((float)0.01 * normal, 1.0);
+		Ray reflection_ray(hitPoint, R);
+		return castRay(scene, reflection_ray, lightSource, depth).specular();
+	}
+	else //IF THE RAY HITS A LIGHTSOURCE
+	{
+		return lightSource.getColor();
+	}
+	 
  }
 
  Direction Camera::reflect(Direction &I, const Direction &N)

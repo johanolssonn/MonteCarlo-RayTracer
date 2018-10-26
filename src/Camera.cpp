@@ -70,6 +70,7 @@
 		 {
 			 finalColor = finalColor + castRay(scene, r, lightSource, 0);
 		 }
+		 //finalColor = ColorDbl(sqrt(finalColor._r), sqrt(finalColor._g), sqrt(finalColor._b)) / _randomRays;
 		 finalColor = finalColor / _randomRays;
 		 _pixelBuffer->_color = finalColor;
 		 _maxClr = glm::max(_maxClr, glm::max(finalColor._r, glm::max(finalColor._g, finalColor._b)));
@@ -133,37 +134,6 @@
 
 Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 
-	/*std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(0.0, 1.0);
-
-    float rand1 = dis(gen);
-    float rand2 = dis(gen);
-
-    float theta = acos(sqrt(1.0 - rand1));
-    float phi = 2.0 * M_PI * rand2;
-
-    float xs = sin(theta) * cos(phi);
-    float ys = cos(theta);
-   	float zs = sin(theta) * sin(phi);
-
-    glm::vec3 y = hitNormal;
-    glm::vec3 h = y; //will be modified
-
-    if(abs(h.x) <= abs(h.y) && abs(h.x) <= abs(h.z))
-        h.x = 1.0;
-    else if(abs(h.y) <= abs(h.x) && abs(h.y) <= abs(h.z))
-        h.y = 1.0;
-    else
-        h.z = 1.0;
-
-    glm::vec3 x = normalize(cross(h,y));
-    glm::vec3 z = normalize(cross(h,y));
-
-    Direction randDirection = glm::normalize(xs * x + ys * y + zs * z);
-	hitPos += Vertex((float)0.01 * hitNormal, 1.0);
-    return Ray(hitPos, randDirection);
-	*/
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> dis(0.0, 1.0);
@@ -175,8 +145,9 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 	glm::vec3 tangent = glm::normalize(glm::cross(hitNormal, helper));
 	float inclination = acos(sqrt(rand1));
 	float azimuth = 2 * M_PI * rand2;
-	// Change the actual vector
+
 	glm::vec3 random_direction = hitNormal;
+
 	random_direction = glm::normalize(glm::rotate(
 		random_direction,
 		inclination,

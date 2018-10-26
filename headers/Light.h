@@ -32,5 +32,4 @@ private:
 
 };
 
-
 #endif LIGHT_H

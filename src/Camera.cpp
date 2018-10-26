@@ -80,22 +80,24 @@
 		 {
 			 const Direction normal = ray._hitNormal; //Triangle normal at intersection point
 			 Vertex hitPoint = ray._end;
+			 // RADIOSITY
+			 Ray radioRay = sampleHemisphere(hitPoint, normal);
+			 radioRay._color = ColorDbl(0.0, 0.0, 0.0);
+			 float angle = glm::angle(radioRay._dir, normal);
+			 ColorDbl radioRayClr = castRay(scene, radioRay, lightSource, depth + 1);
+			 ColorDbl emittance = radioRayClr.diffuse() * cos(angle);
+			 //SHADOW RAY
 			 Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
 			 hitPoint += Vertex((float)0.01 * normal, 1.0);
 			 Ray shadow_ray(hitPoint, lightDir); // Create a shadow ray with intersectionpoint as start and direction towards light as direction.
 
-												 // RADIOSITY
-			 Ray radioRay = sampleHemisphere(hitPoint, normal);
-			 float angle = glm::angle(radioRay._dir, normal);
-			 ColorDbl radioRayClr = castRay(scene, radioRay, lightSource, depth + 1);
-			 ColorDbl emittance = radioRayClr.diffuse() * cos(angle);
-			 //ColorDbl emittance = ray.getColor().diffuse();
-
 			 ColorDbl lightIntensity = scene.getLightIntensity(hitPoint, normal, lightDir);
 			 float c = scene.findIntersection(shadow_ray);
 			 const int intersectedTriangleType = shadow_ray.getColor()._surfType;
+
 			 if (intersectedTriangleType == LIGHTSOURCE)
 			 {
+				 
 				 return ray.getColor() * lightIntensity + emittance;
 			 }
 			 else {
@@ -111,7 +113,7 @@
 			 Vertex hitPoint = ray._end;
 			 hitPoint += Vertex((float)0.01 * normal, 1.0);
 			 Ray reflection_ray(hitPoint, R);
-			 return castRay(scene, reflection_ray, lightSource, depth + 1).specular();
+			 return castRay(scene, reflection_ray, lightSource, depth).specular();
 		 }
 		 else //IF THE RAY HITS A LIGHTSOURCE
 		 {

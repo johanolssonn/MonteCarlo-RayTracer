@@ -6,8 +6,8 @@
 #include <fstream>
 #include <random>
 
-const int WIDTH = 300;
-const int HEIGHT = 300;
+const int WIDTH = 200;
+const int HEIGHT = 200;
 const int MAXDEPTH = 2;
 
 class Camera {
@@ -32,4 +32,6 @@ private:
 	Vertex _eyePoint;
 	Pixel *_pixelArray = new Pixel[WIDTH * HEIGHT];
 	Pixel *_pixelBuffer = _pixelArray;
+	double _maxClr;
+	int _randomRays = 3;
 };

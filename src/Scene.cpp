@@ -210,7 +210,7 @@ ColorDbl Scene::getLightIntensity(Vertex &hitpoint, const Direction &hitnormal, 
 	// calc geometric term
 	double alpha = glm::dot(-hitnormal, shadowRay);
 	double beta = clamp((double)glm::dot(_light.getDirection(), -shadowRay), 0.0, 1.0);
-	double geometric = abs(alpha * beta / pow(lightDistance, 2.0));
+	double geometric = abs(alpha * beta / pow(clamp(lightDistance,1.0 ,40), 2.0));
 	ColorDbl clr = _light.getColor() * _light.getEmission() * geometric;
 
 	return clr * _light.getLightArea();

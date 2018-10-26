@@ -23,6 +23,10 @@
 
  void Camera::generatePrimaryRays(Scene &scene)
  {
+	 std::random_device rd;
+	 std::mt19937 gen(rd());
+	 std::uniform_real_distribution<> dis(0.0, 1.0);
+
 	 float fov = atan(1 / glm::length(_eyePoint)); // this gives fov/2 in radians
 	 Light lightSource = scene.getLight();
 
@@ -31,20 +35,22 @@
 		 for (int i = 0; i < WIDTH; ++i, ++_pixelBuffer) {
 
 			 Pixel p;
-			 // generate primary ray
-			 float y = (1 - 2 * (i + 0.5) / (float)WIDTH)*scale;
-			 float z = (1 - 2 * (j + 0.5) / (float)HEIGHT)*scale;
-			 Vertex ray_origin = _eyePoint;
-			 Direction viewDirection(1.0, 0.0, 0.0);
-			 Direction ray_dir = glm::normalize(viewDirection + glm::vec3(0.0, y, z));
-			 Ray primary_ray(ray_origin, ray_dir);
+			 for (int rr = 0; rr < _randomRays; rr++)
+			 {
+				 // generate primary ray
+				 float rand1 = dis(gen);
+				 float rand2 = dis(gen);
+				 float y = (1 - 2 * (i + rand1) / (float)WIDTH)*scale;
+				 float z = (1 - 2 * (j + rand2) / (float)HEIGHT)*scale;
+				 Vertex ray_origin = _eyePoint;
+				 Direction viewDirection(1.0, 0.0, 0.0);
+				 Direction ray_dir = glm::normalize(viewDirection + glm::vec3(0.0, y, z));
+				 Ray primary_ray(ray_origin, ray_dir);
 
-			 p.addRay(primary_ray);
-
-			 //finalColor /= (double)(3 * 2 * 2);
-			 //double maximum = 0.0;
-			 //maximum = glm::max(maximum, glm::max(finalColor._r, glm::max(finalColor._g, finalColor._b)));
+				 p.addRay(primary_ray);
+			 }
 			 *_pixelBuffer = p;
+			
 		 }
 	 }
 	 _pixelBuffer = _pixelArray; //Reset the buffer to beginning of _pixelArray
@@ -64,7 +70,9 @@
 		 {
 			 finalColor = finalColor + castRay(scene, r, lightSource, 0);
 		 }
+		 finalColor = finalColor / _randomRays;
 		 _pixelBuffer->_color = finalColor;
+		 _maxClr = glm::max(_maxClr, glm::max(finalColor._r, glm::max(finalColor._g, finalColor._b)));
 	 }
 	 _pixelBuffer = _pixelArray;
 
@@ -105,6 +113,7 @@
 		float angle = glm::angle(radioRay._dir, normal);
 		ColorDbl radioRayClr = castRay(scene, radioRay, lightSource, depth + 1);
 		ColorDbl emittance = (radioRay.getColor()._surfType != LIGHTSOURCE) ? radioRayClr * cos(angle) : ColorDbl(0.0, 0.0, 0.0);
+		//ColorDbl emittance = radioRayClr * cos(angle);
 		//SHADOW RAY
 		Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
 		hitPoint += Vertex((float)0.01 * normal, 1.0);
@@ -117,7 +126,7 @@
 		if (intersectedTriangleType == LIGHTSOURCE)
 		{
 				 
-			return ray.getColor().diffuse() * lightIntensity + emittance;
+			return (ray.getColor().diffuse() + emittance) * lightIntensity;
 		}
 		else {
 			return ColorDbl(0.0, 0.0, 0.0) + emittance;
@@ -175,7 +184,7 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
     glm::vec3 z = normalize(cross(h,y));
 
     Direction randDirection = glm::normalize(xs * x + ys * y + zs * z);
-	//hitPos += Vertex((float)0.01 * hitNormal, 1.0);
+	hitPos += Vertex((float)0.01 * hitNormal, 1.0);
     return Ray(hitPos, randDirection);
 
 }
@@ -186,9 +195,12 @@ void Camera::imageToFile()
 	img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
 	for (uint32_t i = 0; i < WIDTH* HEIGHT; ++i, ++_pixelBuffer) {
 		ColorDbl clr = _pixelBuffer->_color;
-		char r = (char)(255 * Scene::clamp(clr._r, 0, 1));
-		char g = (char)(255 * Scene::clamp(clr._g, 0, 1));
-		char b = (char)(255 * Scene::clamp(clr._b, 0, 1));
+		//char r = (char)(255 * Scene::clamp(clr._r, 0, 1));
+		//char g = (char)(255 * Scene::clamp(clr._g, 0, 1));
+		//char b = (char)(255 * Scene::clamp(clr._b, 0, 1));
+		char r = (char)(255.99 * (clr._r / _maxClr));
+		char g = (char)(255.99 * (clr._g / _maxClr));
+		char b = (char)(255.99 * (clr._b / _maxClr));
 
 		img << r << g << b;
 	}

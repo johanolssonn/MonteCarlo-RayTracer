@@ -30,7 +30,7 @@ ColorDbl ColorDbl::reflect() {
 
 ColorDbl ColorDbl::specular() {
     
-    return *this;
+    return *this*reflectionCoefficient;
 }
 
 ColorDbl ColorDbl::diffuse() {

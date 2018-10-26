@@ -6,9 +6,9 @@
 #include <fstream>
 #include <random>
 
-const int WIDTH = 400;
-const int HEIGHT = 400;
-const int MAXDEPTH = 2;
+const int WIDTH = 600;
+const int HEIGHT = 600;
+const int MAXDEPTH = 3;
 
 class Camera {
 public:
@@ -16,19 +16,20 @@ public:
 	~Camera() {
 		delete [] _pixelArray;
 	}
-	bool trace(Ray &ray, std::vector<Triangle> &triangles);//,const int &depth);
-	void render(Scene&);
 	void createImage(Scene&);
-	void imageToFile();
+	void render(Scene&);
+	void generatePrimaryRays(Scene &scene);
+	void castRays(Scene &scene);
 	ColorDbl castRay(Scene &scene, Ray &ray, Light &lightSource, int depth);
 	Direction reflect(Direction &I, const Direction &N);
     Ray sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal);
+	void imageToFile();
 
-	Pixel *_pixelArray = new Pixel[WIDTH * HEIGHT];
-	Pixel *_pixelBuffer = _pixelArray;
 
 private: 
 	
 	bool _useEyePoint1;
 	Vertex _eyePoint;
+	Pixel *_pixelArray = new Pixel[WIDTH * HEIGHT];
+	Pixel *_pixelBuffer = _pixelArray;
 };

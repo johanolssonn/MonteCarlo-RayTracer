@@ -7,9 +7,11 @@ public:
 	Pixel();
 	Pixel(ColorDbl &color);
 	~Pixel() = default;
+	void addRay(Ray &ray) { _rays.push_back(ray); }
+	std::vector<Ray> getRays() { return _rays; }
 
 	ColorDbl _color;
 private:
 	
-	//std::vector<Ray> _rays;
+	std::vector<Ray> _rays;
 };

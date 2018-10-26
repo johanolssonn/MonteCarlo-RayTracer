@@ -79,84 +79,61 @@
  }
 
  ColorDbl Camera::castRay(Scene &scene, Ray &ray, Light &lightSource, int depth) {
-
-	 if (depth > MAXDEPTH )//|| russian roulette 
-	 { 
-		 const Direction normal = ray._hitNormal; //Triangle normal at intersection point
-		 Vertex hitPoint = ray._start;
-		 //SHADOW RAY
-		 Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
-		 hitPoint += Vertex((float)0.01 * normal, 1.0);
-		 Ray shadow_ray(hitPoint, lightDir); // Create a shadow ray with intersectionpoint as start and direction towards light as direction.
-
-		 ColorDbl lightIntensity = scene.getLightIntensity(hitPoint, normal, lightDir);
-		 float c = scene.findIntersection(shadow_ray);
-		 const int intersectedTriangleType = shadow_ray.getColor()._surfType;
-		 if (intersectedTriangleType == LIGHTSOURCE)
-		 {
-
-			 return ray.getColor().diffuse() * lightIntensity;
-		 }
-		 else {
-			 return ColorDbl(0.0, 0.0, 0.0);
-		 }
-	 }
+	ColorDbl clr(0.0, 0.0, 0.0);
 	float closestIntersection = scene.findIntersection(ray); //DIST TO TRIANGLE
-	if (closestIntersection < INFINITY && ray._color._surfType == LAMBERTIAN) // If a triangle is closer than any sphere.
+	const int intersectedSurfaceType = ray.getColor()._surfType;
+	if(closestIntersection < INFINITY && intersectedSurfaceType == LIGHTSOURCE) //IF THE RAY HITS A LIGHTSOURCE
 	{
-		const Direction normal = ray._hitNormal; //Triangle normal at intersection point
-		Vertex hitPoint = ray._end;
-		// RADIOSITY
-		Ray radioRay = sampleHemisphere(hitPoint, normal);
-		radioRay._hitNormal = normal;
-		radioRay._color = ColorDbl(0.0, 0.0, 0.0);
-		float angle = glm::angle(radioRay._dir, normal);
-		ColorDbl radioRayClr = castRay(scene, radioRay, lightSource, depth + 1);
-		ColorDbl emittance = (radioRay.getColor()._surfType != LIGHTSOURCE) ? radioRayClr * cos(angle) : ColorDbl(0.0, 0.0, 0.0);
-		//ColorDbl emittance = radioRayClr * cos(angle);
+		clr = ray.getColor();
+	}
+	else if (closestIntersection < INFINITY)
+	{
+		const Direction normal = ray._hitNormal; //Surface normal at intersection point
+		Vertex hitPoint = ray._end; //Hitpoint on the intersected surface
+		Ray out;
+		if (intersectedSurfaceType == LAMBERTIAN)
+		{
+			out = sampleHemisphere(hitPoint, normal); //Gets a ray with random outgoing direction
+			out._hitNormal = normal;
+		}
+		else //(intersectedSurfaceType == SPECULAR)
+		{
+			Direction R = reflectRay(ray._dir, normal); //get a reflection direction that is equal to incoming direction
+			hitPoint += Vertex((float)0.01 * normal, 1.0);
+			out = Ray(hitPoint, R);
+		}
+
+		float angle = glm::angle(out._dir, normal);
+		ColorDbl emittance = ray.getColor().reflect() * cos(angle);
+		clr = clr + emittance;
+
 		//SHADOW RAY
 		Direction lightDir = glm::normalize(lightSource.getCenter() - glm::vec3(hitPoint));
 		hitPoint += Vertex((float)0.01 * normal, 1.0);
 		Ray shadow_ray(hitPoint, lightDir); // Create a shadow ray with intersectionpoint as start and direction towards light as direction.
-
 		ColorDbl lightIntensity = scene.getLightIntensity(hitPoint, normal, lightDir);
 		float c = scene.findIntersection(shadow_ray);
-		const int intersectedTriangleType = shadow_ray.getColor()._surfType;
+		const int shadowSurfaceType = shadow_ray.getColor()._surfType;
+		clr = (shadowSurfaceType == LIGHTSOURCE) ? clr*lightIntensity : ColorDbl(0.0, 0.0, 0.0);
+		//clr = clr*lightIntensity;
 
-		if (intersectedTriangleType == LIGHTSOURCE)
+		if (depth < MAXDEPTH)//|| russian roulette 
 		{
-				 
-			return (ray.getColor().diffuse() + emittance) * lightIntensity;
-		}
-		else {
-			return ColorDbl(0.0, 0.0, 0.0) + emittance;
+			int nextDepth = (intersectedSurfaceType == SPECULAR) ? depth : depth + 1;
+			clr = clr + castRay(scene, out, lightSource, nextDepth) * 0.8;
 		}
 	}
-	else if (closestIntersection < INFINITY && ray._color._surfType == SPECULAR)
-	{
-		//recursive
-		const Direction normal = ray._hitNormal; //Triangle normal at intersection point
-		Direction R = reflect(ray._dir, normal);
-		Vertex hitPoint = ray._end;
-		hitPoint += Vertex((float)0.01 * normal, 1.0);
-		Ray reflection_ray(hitPoint, R);
-		return castRay(scene, reflection_ray, lightSource, depth).specular();
-	}
-	else //IF THE RAY HITS A LIGHTSOURCE
-	{
-		return lightSource.getColor();
-	}
-	 
+	return clr;
  }
 
- Direction Camera::reflect(Direction &I, const Direction &N)
+ Direction Camera::reflectRay(Direction &I, const Direction &N)
  {
 	 return I - 2 * glm::dot(I, N) * N;
  }
 
 Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 
-	std::random_device rd;
+	/*std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> dis(0.0, 1.0);
 
@@ -186,6 +163,30 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
     Direction randDirection = glm::normalize(xs * x + ys * y + zs * z);
 	hitPos += Vertex((float)0.01 * hitNormal, 1.0);
     return Ray(hitPos, randDirection);
+	*/
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(0.0, 1.0);
+
+	double rand1 = dis(gen);
+	double rand2 = dis(gen);
+
+	glm::vec3 helper = hitNormal + glm::vec3(1, 1, 1);
+	glm::vec3 tangent = glm::normalize(glm::cross(hitNormal, helper));
+	float inclination = acos(sqrt(rand1));
+	float azimuth = 2 * M_PI * rand2;
+	// Change the actual vector
+	glm::vec3 random_direction = hitNormal;
+	random_direction = glm::normalize(glm::rotate(
+		random_direction,
+		inclination,
+		tangent));
+	random_direction = glm::normalize(glm::rotate(
+		random_direction,
+		azimuth,
+		hitNormal));
+
+	return Ray(hitPos, random_direction);
 
 }
 
@@ -198,9 +199,9 @@ void Camera::imageToFile()
 		//char r = (char)(255 * Scene::clamp(clr._r, 0, 1));
 		//char g = (char)(255 * Scene::clamp(clr._g, 0, 1));
 		//char b = (char)(255 * Scene::clamp(clr._b, 0, 1));
-		char r = (char)(255.99 * (clr._r / _maxClr));
-		char g = (char)(255.99 * (clr._g / _maxClr));
-		char b = (char)(255.99 * (clr._b / _maxClr));
+		char r = (char)(255 * (clr._r / _maxClr));
+		char g = (char)(255 * (clr._g / _maxClr));
+		char b = (char)(255 * (clr._b / _maxClr));
 
 		img << r << g << b;
 	}

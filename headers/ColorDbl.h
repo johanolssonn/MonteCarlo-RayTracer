@@ -31,7 +31,7 @@ public:
 	int _surfType = LAMBERTIAN;
 private:
     
-    float reflectionCoefficient = 0.8;
+    double reflectionCoefficient = 0.8;
 	
 };
 

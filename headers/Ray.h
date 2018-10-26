@@ -10,6 +10,7 @@ struct Triangle;
 
 class Ray {
 public:
+	Ray();
 	Ray(Vertex &start, Direction &dir);
 	~Ray() = default;
 

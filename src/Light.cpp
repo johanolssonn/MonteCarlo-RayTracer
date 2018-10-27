@@ -1,6 +1,5 @@
 #include "Light.h"
 
-
 Light::Light() {
 
     // (TOP VIEW)
@@ -27,7 +26,7 @@ Light::Light() {
 
 	_center = glm::vec3(5.0, 0.0, 4.99);
 
-	_emission = ColorDbl(30.0, 30.0, 30.0);
+	_emission = ColorDbl(20.0, 20.0, 20.0);
 
 	_area = glm::distance(a, b) * glm::distance(a, c);
 
@@ -35,4 +34,14 @@ Light::Light() {
 
 std::vector<Triangle> Light::getLightTriangles() {
     return _lightTriangles;
+}
+
+glm::vec3 Light::getRandomPoint()
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(0.0, 2.0);
+
+	glm::vec3 randP(4.0 + dis(gen), 1.0 - dis(gen), 4.99);
+	return randP;
 }

@@ -6,6 +6,7 @@
 #include "Triangle.h"
 
 #include <vector>
+#include <random>
 
 
 class Light {
@@ -19,6 +20,8 @@ public:
 	ColorDbl getColor() { return _color; }
 	ColorDbl getEmission() { return _emission; }
 	double getLightArea() { return _area; }
+	glm::vec3 getRandomPoint();
+
 
 private:
 

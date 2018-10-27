@@ -19,6 +19,10 @@ public:
 	ColorDbl operator*(float x) { return ColorDbl(_r * x, _g * x, _b * x); }
 	ColorDbl operator*(ColorDbl rhs) { return ColorDbl(_r * rhs._r, _g * rhs._g, _b * rhs._b); }
     friend std::ostream& operator<<(std::ostream& os, const ColorDbl &c);
+
+	double getTotal() {
+		return _r + _g + _b;
+	}
     
     ColorDbl reflect();
     ColorDbl specular();

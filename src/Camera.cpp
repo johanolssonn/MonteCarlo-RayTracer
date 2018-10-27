@@ -76,9 +76,16 @@ double randZero_One()
 		 {
 			 finalColor = finalColor + castRay(scene, r, lightSource, 0);
 		 }
-		 finalColor = ColorDbl(sqrt(finalColor._r), sqrt(finalColor._g), sqrt(finalColor._b)) / _randomRays;
+
+		 //finalColor = ColorDbl(sqrt(finalColor._r), sqrt(finalColor._g), sqrt(finalColor._b));
+
+		 finalColor = finalColor / _randomRays;
 		 _pixelBuffer->_color = finalColor;
-		 _maxClr = glm::max(_maxClr, glm::max(finalColor._r, glm::max(finalColor._g, finalColor._b)));
+
+		 //max for each channel
+		 if(finalColor.getTotal() > _maxClr.getTotal()) {
+		 _maxClr = finalColor;}
+
 	 }
 	 _pixelBuffer = _pixelArray;
 
@@ -166,6 +173,8 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 
 void Camera::imageToFile()
 {
+	std::cout << "MAX: " << _maxClr;
+
 	std::ofstream img("picture.ppm", std::ios::out | std::ios::binary); //Second argument is so that colors are correct on Windows.
 	img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
 	for (uint32_t i = 0; i < WIDTH* HEIGHT; ++i, ++_pixelBuffer) {
@@ -173,9 +182,10 @@ void Camera::imageToFile()
 		//char r = (char)(255 * Scene::clamp(clr._r, 0, 1));
 		//char g = (char)(255 * Scene::clamp(clr._g, 0, 1));
 		//char b = (char)(255 * Scene::clamp(clr._b, 0, 1));
-		char r = (char)(255 * (clr._r / _maxClr));
-		char g = (char)(255 * (clr._g / _maxClr));
-		char b = (char)(255 * (clr._b / _maxClr));
+
+		char r = (char)(255 * (clr._r / _maxClr._r));
+		char g = (char)(255 * (clr._g / _maxClr._g));
+		char b = (char)(255 * (clr._b / _maxClr._b));
 
 		img << r << g << b;
 	}

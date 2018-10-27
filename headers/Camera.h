@@ -26,7 +26,7 @@ public:
 	void imageToFile();
 
 
-private: 
+private:
 	
 	bool _useEyePoint1;
 	Vertex _eyePoint;

@@ -11,7 +11,7 @@ double randZero_One()
 
  Camera::Camera(bool useEyePoint1)
 	 :	_useEyePoint1{useEyePoint1} {
-	 
+
 	 if (useEyePoint1)
 		 _eyePoint = Vertex{ -2.0, 0.0, 0.0, 0.0 }; //e1
 	 else
@@ -56,7 +56,7 @@ double randZero_One()
 				 p.addRay(primary_ray);
 			 }
 			 *_pixelBuffer = p;
-			
+
 		 }
 	 }
 	 _pixelBuffer = _pixelArray; //Reset the buffer to beginning of _pixelArray
@@ -78,7 +78,7 @@ double randZero_One()
 		 }
 		 finalColor = ColorDbl(sqrt(finalColor._r), sqrt(finalColor._g), sqrt(finalColor._b)) / _randomRays;
 		 _pixelBuffer->_color = finalColor;
-		 _maxClr = glm::max(_maxClr, glm::max(finalColor._r, glm::max(finalColor._g, finalColor._b))); 
+		 _maxClr = glm::max(_maxClr, glm::max(finalColor._r, glm::max(finalColor._g, finalColor._b)));
 	 }
 	 _pixelBuffer = _pixelArray;
 
@@ -148,8 +148,9 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 	glm::vec3 tangent = glm::normalize(glm::cross(hitNormal, helper));
 	float inclination = acos(sqrt(rand1));
 	float azimuth = 2 * M_PI * rand2;
-	// Change the actual vector
+
 	glm::vec3 random_direction = hitNormal;
+
 	random_direction = glm::normalize(glm::rotate(
 		random_direction,
 		inclination,
@@ -180,4 +181,3 @@ void Camera::imageToFile()
 	}
 	img.close();
 }
-

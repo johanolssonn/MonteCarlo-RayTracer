@@ -18,7 +18,8 @@ ColorDbl Sphere::getColor() {
 
 float Sphere::sphereIntersection(Ray &r) {
 
-    //geometric solution
+    //GEOMETRIC SOLUTION
+
     float t0, t1; //solutions for t if the ray intersects
 
     // because _start is a vec4 :(

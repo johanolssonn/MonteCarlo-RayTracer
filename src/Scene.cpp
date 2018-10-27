@@ -39,16 +39,6 @@ void Scene::createScene()
 	const Vertex origo_ceiling{ 0.0, 0.0, 5.0, 1.0 };
 	const Vertex origo10_ceiling{ 10.0, 0.0, 5.0, 1.0 };
 
-/*	const Vertex g{ -3.0f, .0f, 5.0f };
-	const Vertex h{ .0f, .0f, 5.0f };
-	const Vertex i{ 10.0f, .0f, 5.0f };
-	const Vertex j{ 13.0f, .0f, 5.0f };
-	const Vertex k{ 13.0f, .0f, -5.0f };
-	const Vertex l{ 10.0f, .0f, -5.0f };
-	const Vertex m{ .0f, .0f, -5.0f };
-	const Vertex n{ -3.0f, .0f, -5.0f };
-	*/
-
 
 	const ColorDbl white(1.0, 1.0, 1.0); //Default constructor gives white color
 	const ColorDbl red(1.0, 0.0, 0.0); 	//RIGHT WALL
@@ -139,9 +129,7 @@ Direction Scene::CalculateSurfaceNormal(const Vertex &p1, const Vertex &p2, cons
 
 float Scene::findIntersection(Ray &ray)
 {
-	//CALL Triangle::rayIntersection(Ray &ray) for every triangle in the secene untill it returns true
-	//Then pass a reference to argument "ray" which <Triangle> that is intersected 
-	//aswell as the intersectionpoint <Vertex>.
+
 	float tClosest = INFINITY;
 	float t = INFINITY;
 	Ray tempRay = ray;

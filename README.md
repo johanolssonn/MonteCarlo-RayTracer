@@ -4,7 +4,7 @@ A project for the course Advanced Global Illumination (TNCG15) at Linköping Uni
 ## Languages
 This MonteCarlo-RayTracer is built solely on C++ and the OpenGL Mathematics (GLM) library. 
 
-##The room
+## The room
 The rendered image is of a closed room with 6 walls, 1 tetrahedron and 2 spheres. One of the walls aswell as one of the spheres
 uses specular reflections. The floor, ceileing and the remaining walls and objects uses a Lambertian based BRDF. 
 Total amount of triangles in the scene is 28. The boundries of the room makes up 24, and the tetrahedron is the other 4.

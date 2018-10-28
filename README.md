@@ -19,5 +19,4 @@ directions in order to achieve soft shadows.
 The final image rendered is 2000x2000 pixels. We randomize ray directions with 35 samples per pixel. Each ray has a max depth 
 of 4 bounces, unless they're prematurely eliminated by the roussian roulette scheme. 
 
-![Final Image] (https://imgur.com/a/jpUUkTK)
-![alt text](https://raw.johanolssonncontent/MonteCarlo-RayTracer/blob/master/raytracer.png)
+[[https://github.com/johanolssonn/MonteCarlo-RayTracer/blob/master/raytracer.png|alt=octocat]]

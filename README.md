@@ -15,7 +15,7 @@ Triangle intersections are calculated using the Möller Trumbore algorithm. The 
 buit up by two triangles and located slighlty below the ceiling. We treat it as an area light and randomize the shadowray
 directions in order to achieve soft shadows.
 
-##Rendered Image
+## Rendered Image
 The final image rendered is 2000x2000 pixels. We randomize ray directions with 35 samples per pixel. Each ray has a max depth 
 of 4 bounces, unless they're prematurely eliminated by the roussian roulette scheme. 
 

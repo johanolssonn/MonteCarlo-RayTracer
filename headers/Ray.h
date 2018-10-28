@@ -8,13 +8,11 @@
 
 struct Triangle;
 
-class Ray {
-public:
+struct Ray {
+
 	Ray();
 	Ray(Vertex &start, Direction &dir);
 	~Ray() = default;
-
-
 
 	ColorDbl getColor() { return _color; }
 
@@ -26,9 +24,6 @@ public:
 	Direction _hitNormal;
 	float tMax = 20;
 
-
-private:
-	
 };
 
 #endif //RAY_H

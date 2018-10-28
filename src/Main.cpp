@@ -23,7 +23,7 @@ int main () {
 	Light light;
 	sc.importTriangles(light.getLightTriangles());
 
-	Camera cam(false); // true => uses eyepoint1 (-2, 0, 0);
+	Camera cam(false); // true => (-2, 0, 0)  false => (-1, 0, 0)
 	cam.createImage(sc);
 
 

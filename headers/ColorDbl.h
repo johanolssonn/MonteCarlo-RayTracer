@@ -28,15 +28,10 @@ public:
     ColorDbl specular();
     ColorDbl diffuse();
 
-
-	
-
 	double _r, _g, _b;
 	int _surfType = LAMBERTIAN;
 private:
-    
     double reflectionCoefficient = 0.8;
-	
 };
 
 #endif //COLORDBL_H

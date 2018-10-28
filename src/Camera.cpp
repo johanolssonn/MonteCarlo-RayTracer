@@ -32,11 +32,11 @@ double randZero_One()
 
  void Camera::generatePrimaryRays(Scene &scene)
  {
-
-	 float fov = atan(1 / glm::length(_eyePoint)); // this gives fov/2 in radians
 	 Light lightSource = scene.getLight();
-
+	 float fov = atan(1 / glm::length(_eyePoint)); // this gives fov/2 in radians
 	 float scale = tan(fov);
+	 float imageAspectRatio = WIDTH / (float)HEIGHT; // assuming width > height
+	 
 	 for (int j = 0; j < HEIGHT; ++j) {
 		 for (int i = 0; i < WIDTH; ++i, ++_pixelBuffer) {
 
@@ -46,7 +46,7 @@ double randZero_One()
 				 // generate primary ray
 				 float rand1 = randZero_One();
 				 float rand2 = randZero_One();
-				 float y = (1 - 2 * (i + rand1) / (float)WIDTH)*scale;
+				 float y = (1 - 2 * (i + rand1) / (float)WIDTH)*scale * imageAspectRatio;
 				 float z = (1 - 2 * (j + rand2) / (float)HEIGHT)*scale;
 				 Vertex ray_origin = _eyePoint;
 				 Direction viewDirection(1.0, 0.0, 0.0);
@@ -56,7 +56,6 @@ double randZero_One()
 				 p.addRay(primary_ray);
 			 }
 			 *_pixelBuffer = p;
-
 		 }
 	 }
 	 _pixelBuffer = _pixelArray; //Reset the buffer to beginning of _pixelArray
@@ -76,18 +75,12 @@ double randZero_One()
 		 {
 			 finalColor = finalColor + castRay(scene, r, lightSource, 0);
 		 }
-
-		 //finalColor = ColorDbl(sqrt(finalColor._r), sqrt(finalColor._g), sqrt(finalColor._b));
-
-		 finalColor = finalColor / _randomRays;
+		 finalColor = finalColor / (double)_randomRays;
 		 _pixelBuffer->_color = finalColor;
 
-		 //max for each channel
-		 if(finalColor.getTotal() > _maxClr.getTotal()) {
-		 _maxClr = finalColor;}
-
+		 _maxClr = (finalColor.getTotal() > _maxClr.getTotal()) ? finalColor : _maxClr;
 	 }
-	 _pixelBuffer = _pixelArray;
+	 _pixelBuffer = _pixelArray; //Reset buffer
 
  }
 
@@ -117,7 +110,7 @@ double randZero_One()
 		}
 
 		float angle = glm::angle(out._dir, normal);
-		ColorDbl emittance = ray.getColor().reflect() * cos(angle);
+		ColorDbl emittance = ray.getColor().reflect() *cos(angle);
 		clr = clr + emittance;
 
 		//SHADOW RAY
@@ -129,10 +122,9 @@ double randZero_One()
 		float c = scene.findIntersection(shadow_ray);
 		const int shadowSurfaceType = shadow_ray.getColor()._surfType;
 		clr = (shadowSurfaceType == LIGHTSOURCE) ? clr*lightIntensity : ColorDbl(0.0, 0.0, 0.0);
-		//clr = clr*lightIntensity;
 
-		double rrTop = glm::max(glm::max(emittance._r, emittance._g), emittance._b);
-		if (depth < MAXDEPTH || randZero_One() < rrTop)
+		double rusRoulette = glm::max(glm::max(emittance._r, emittance._g), emittance._b);
+		if (depth < MAXDEPTH || randZero_One() < rusRoulette)
 		{
 			int nextDepth = (intersectedSurfaceType == SPECULAR) ? depth : depth + 1;
 			clr = clr + castRay(scene, out, lightSource, nextDepth) * 0.8;
@@ -168,25 +160,19 @@ Ray Camera::sampleHemisphere(Vertex hitPos, glm::vec3 hitNormal){
 		hitNormal));
 
 	return Ray(hitPos, random_direction);
-
 }
 
 void Camera::imageToFile()
 {
-	std::cout << "MAX: " << _maxClr;
-
 	std::ofstream img("picture.ppm", std::ios::out | std::ios::binary); //Second argument is so that colors are correct on Windows.
 	img << "P6\n" << WIDTH << " " << HEIGHT << "\n255\n";
 	for (uint32_t i = 0; i < WIDTH* HEIGHT; ++i, ++_pixelBuffer) {
 		ColorDbl clr = _pixelBuffer->_color;
-		//char r = (char)(255 * Scene::clamp(clr._r, 0, 1));
-		//char g = (char)(255 * Scene::clamp(clr._g, 0, 1));
-		//char b = (char)(255 * Scene::clamp(clr._b, 0, 1));
 
 		char r = (char)(255 * (clr._r / _maxClr._r));
 		char g = (char)(255 * (clr._g / _maxClr._g));
 		char b = (char)(255 * (clr._b / _maxClr._b));
-
+		
 		img << r << g << b;
 	}
 	img.close();

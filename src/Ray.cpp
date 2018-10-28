@@ -6,7 +6,5 @@ Ray::Ray()
 	_dir = Direction(0);
 }
 Ray::Ray(Vertex &start, Direction &dir)
-	:_start{ start }, _dir{ dir }
-{
-}
+	:_start{ start }, _dir{ dir } {}
 

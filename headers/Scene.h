@@ -24,13 +24,6 @@ public:
 	void importTriangles(std::vector<Triangle>);
 	Light getLight() { return _light; }
 	ColorDbl getLightIntensity(Vertex &hitpoint, const Direction &hitnormal, glm::vec3 &lightpoint, Direction &shadowRay);
-	void logTrianglesTypes()
-	{
-		for (Triangle &t : _triangleList)
-		{
-			std::cout << "surfacetype = " << t.getColor()._surfType << std::endl;
-		}
-	}
 
 	static double clamp(double v, double lo, double hi);
 
